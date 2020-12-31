@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/gkamer/Desktop/Projects/GitRepos/chess/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./include -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./src -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/chess.dir/src/chess.cpp.o -c /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp",
+  "file": "/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp"
+}
+]
