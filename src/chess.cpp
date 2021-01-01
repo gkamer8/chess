@@ -4,36 +4,44 @@
 
 using namespace std;
 
-int cpu_color;
+colors_t cpu_color;
 
 int main(){
 
+    // Choose color
     while(true){
         char col_choice;
         cout << "Black (b), white (w), or random (r)?\n";
+        // The input choice is the opposite of the cpu color
         if(cin >> col_choice){
             if(col_choice == 'b'){
-                cpu_color = BLACK;
+                cpu_color = white;
                 break;
             }
             else if(col_choice == 'w'){
-                cpu_color = WHITE;
+                cpu_color = black;
                 break;
             }
             else if(col_choice == 'r'){
-                cpu_color = rand() % 2 ? WHITE : BLACK;
+                srand((unsigned int)time(NULL));  // Seed
+                cpu_color = (rand() % 2 == 0) ? white : black;
                 break;
             }
             else{
-                cout << "Selection invalid" << "\n";
+                cout << "Selection invalid" << endl;
             } 
         }
         else{
-            cout << "Selection invalid";
+            cout << "Selection invalid" << endl;
         }
     }
 
-    cout << cpu_color << "\n";
+    if(cpu_color == white){
+        cout << "I am white." << endl;
+    }
+    else{
+        cout << "I am black." << endl;
+    }
 
     // Main game loop
     while(true){
