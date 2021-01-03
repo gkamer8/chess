@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "chess.h"
 #include "cpu.h"
+#include "board.h"
 
 using namespace std;
 
@@ -11,11 +12,14 @@ bool cpu_turn = false;
 
 int main(){
 
+    // Instantiate a board
+    Board brd;
+    
     // Choose color
     cpu_color = prompt_color();
 
     // "cpu.cpp" is the file, "Cpu" is the class/constructor, and "comp" is the instance
-    Cpu comp(cpu_color);
+    Cpu comp(cpu_color, brd);
 
     if(cpu_color == white){
         cout << "I am white." << endl;

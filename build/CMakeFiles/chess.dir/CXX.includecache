@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.cpp
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+iostream
+-
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp
 iostream
 -
@@ -15,12 +31,20 @@ chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
 cpu.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp
+cpu.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
 chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
 string
 -
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 

@@ -8,5 +8,10 @@
   "directory": "/Users/gkamer/Desktop/Projects/GitRepos/chess/build",
   "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./include -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./src -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/chess.dir/src/cpu.cpp.o -c /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp",
   "file": "/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp"
+},
+{
+  "directory": "/Users/gkamer/Desktop/Projects/GitRepos/chess/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./include -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./src -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/chess.dir/src/board.cpp.o -c /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.cpp",
+  "file": "/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.cpp"
 }
 ]

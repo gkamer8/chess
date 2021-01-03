@@ -1,6 +1,6 @@
 #include "cpu.h"
 
-Cpu::Cpu(colors_t clr){
+Cpu::Cpu(colors_t clr, Board& brd){
     color = clr;
 }
 
