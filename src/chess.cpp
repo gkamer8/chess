@@ -45,19 +45,16 @@ colors_t prompt_color(){
         cout << "Black (b), white (w), or random (r)?\n";
         // The input choice is the opposite of the cpu color
         if(cin >> col_choice){
-            if(col_choice == 'b'){
+            if(col_choice == 'b')
                 return white;
-            }
-            else if(col_choice == 'w'){
+            else if(col_choice == 'w')
                 return black;
-            }
             else if(col_choice == 'r'){
                 srand((unsigned int)time(NULL));  // Seed
                 return (rand() % 2 == 0) ? white : black;
             }
-            else{
+            else
                 cout << "Selection invalid" << endl;
-            } 
         }
         else{
             cout << "Selection invalid" << endl;
