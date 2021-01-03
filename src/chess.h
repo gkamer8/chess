@@ -1,7 +1,4 @@
 
-#ifndef CHESS_H
-#define CHESS_H
+#pragma
 
 enum colors_t {white, black};
-
-#endif
