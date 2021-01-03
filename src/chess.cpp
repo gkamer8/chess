@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "chess.h"
+#include "cpu.h"
 
 using namespace std;
 
@@ -13,8 +14,12 @@ int main(){
     // Choose color
     cpu_color = prompt_color();
 
+    // "cpu.cpp" is the file, "Cpu" is the class/constructor, and "comp" is the instance
+    Cpu comp(cpu_color);
+
     if(cpu_color == white){
         cout << "I am white." << endl;
+        cpu_turn = true;
     }
     else{
         cout << "I am black." << endl;
@@ -23,6 +28,7 @@ int main(){
     // Main game loop
     while(true){
         if(cpu_turn){
+            cout << comp.getMove() << endl;
             break;
         }
         else{
