@@ -93,7 +93,7 @@ void BoardTests::parseMoveTest(Board& brd){
         std::cout << "Qs-c: " << mv.qs_castle << std::endl;
     }
     catch(const char* exp){
-        std::cout << exp << std::endl;
+        std::cout << move << ": " << exp << std::endl;
     }
     std::cout << std::endl;
 
@@ -108,7 +108,7 @@ void BoardTests::parseMoveTest(Board& brd){
         std::cout << "Qs-c: " << mv.qs_castle << std::endl;
     }
     catch(const char* exp){
-        std::cout << exp << std::endl;
+        std::cout << move << ": " << exp << std::endl;
     }
     std::cout << std::endl;
 
@@ -123,7 +123,7 @@ void BoardTests::parseMoveTest(Board& brd){
         std::cout << "Qs-c: " << mv.qs_castle << std::endl;
     }
     catch(const char* exp){
-        std::cout << exp << std::endl;
+        std::cout << move << ": " << exp << std::endl;
     }
     std::cout << std::endl;
 
@@ -139,7 +139,39 @@ void BoardTests::parseMoveTest(Board& brd){
         std::cout << "Qs-c: " << mv.qs_castle << std::endl;
     }
     catch(const char* exp){
-        std::cout << exp << std::endl;
+        std::cout << move << ": " << exp << std::endl;
+    }
+    brd.setMoveColor(white);
+    std::cout << std::endl;
+
+    move = "e1";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
+    move = "e1";
+    brd.setMoveColor(black);
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
     }
     brd.setMoveColor(white);
     std::cout << std::endl;
