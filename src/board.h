@@ -77,6 +77,7 @@ class Board{
         Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash> getSquareMap();
         std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getPieceMap();
+        void setMoveColor(colors_t);
 };
 
 #endif

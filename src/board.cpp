@@ -167,12 +167,96 @@ struct Move Board::parseMove(std::string move){
     if(move == "O-O" || move == "0-0"){
         parsedMove.ks_castle = true;
         parsedMove.qs_castle = false;
-        parsedMove.piece = square_map["e1"].piece;
-        parsedMove.to = &square_map["g1"];
+        for(std::list<Piece*>::iterator it = piece_map[K].begin(); it != piece_map[K].end(); it++){
+            if(move_color == (*it)->owner){
+                parsedMove.piece = *it;
+            }
+        }
+        if(move_color == white){
+            parsedMove.to = &square_map["g1"];
+        }
+        else{
+            parsedMove.to = &square_map["g8"];
+        }
         return parsedMove;
     }
 
+    // Is the move qs castles?
+    if(move == "O-O-O" || move == "0-0-0"){
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = true;
+        for(std::list<Piece*>::iterator it = piece_map[K].begin(); it != piece_map[K].end(); it++){
+            if(move_color == (*it)->owner){
+                parsedMove.piece = *it;
+            }
+        }
+        if(move_color == white){
+            parsedMove.to = &square_map["c1"];
+        }
+        else{
+            parsedMove.to = &square_map["c8"];
+        }
+        return parsedMove;
+    }
+
+    // Is it a pawn move?
+    if(std::islower(move[0])){
+        // Is it a pawn push?
+        if(std::isdigit(move[1])){
+            // Pawn push can't be more than 2 characters
+            if(move.length() > 2){
+                throw "Move illformed";
+            }
+            // Has to actually represent a square
+            if(square_map.count(move) == 0){
+                throw "Move illformed";
+            }
+            // Can't be _1 or _2 as white; can't be _7 or _8 as black
+            if(move_color == white){
+                if(move[1] == '1' || move[1] == '2'){
+                    throw "Move illformed";
+                }
+            }
+            else{
+                if(move[1] == '7' || move[1] == '8'){
+                    throw "Move illformed";
+                }
+            }
+            // Find the pawn being moved
+            Square* current_square = move_color == white ? square_map[move].s : square_map[move].n;
+            while(true){
+                if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
+                    parsedMove.piece = current_square->piece;
+                    break;
+                }
+                if(move_color == white){
+                    if(current_square->s == nullptr){
+                        throw "Move illformed";
+                    }
+                    current_square = current_square->s;
+                }
+                else{
+                    if(current_square->n == nullptr){
+                        throw "Move illformed";
+                    }
+                    current_square = current_square->n;
+                }
+            }
+            parsedMove.ks_castle = false;
+            parsedMove.qs_castle = false;
+            parsedMove.to = &square_map[move];
+            return parsedMove;
+        }
+
+        // Is it a pawn capture?
+
+    }
+
     throw "Move illformed";
+}
+
+void Board::setMoveColor(colors_t col){
+    move_color = col;
 }
 
 Piece* Board::getHeadPiece(){
