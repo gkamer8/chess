@@ -115,7 +115,6 @@ Board::Board(){
     }
 
     // Now put together the piece list
-
     Piece* current_piece;
     for(int rank = 0; rank<8; rank++){
         for(char file = 'a'; file<'i'; file++){
@@ -126,6 +125,7 @@ Board::Board(){
             if(rank == 0 && file == 'a'){
                 // Should be a rook
                 head_piece.next = square_map[key].piece;
+                head_piece.prev = nullptr;
                 current_piece = head_piece.next;
                 current_piece->prev = &head_piece;
             }
@@ -135,6 +135,13 @@ Board::Board(){
                 current_piece = current_piece->next;
             }
         }
+    }
+
+    // Initialize piece_map
+    current_piece = &head_piece;
+    while(current_piece->next != nullptr){
+        current_piece = current_piece->next;
+        piece_map[current_piece->type].push_front(current_piece);
     }
 }
 
@@ -174,5 +181,9 @@ Piece* Board::getHeadPiece(){
 
 std::unordered_map<std::string, Square, CustomHash> Board::getSquareMap(){
     return square_map;
+}
+
+std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getPieceMap(){
+    return piece_map;
 }
 

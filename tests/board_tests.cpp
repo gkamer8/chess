@@ -22,6 +22,8 @@ std::string piece_to_string(piece_t pie){
 }
 
 void BoardTests::pieceListTest(Board& brd){
+    std::cout << std::endl;
+
     Piece head_piece = *brd.getHeadPiece();
     Piece current_piece = *(head_piece.next);
     bool gone_forward = false;
@@ -45,9 +47,13 @@ void BoardTests::pieceListTest(Board& brd){
             }
         }
     }
+
+    std::cout << std::endl;
 }
 
 void BoardTests::squareLocTest(Board& brd){
+    std::cout << std::endl;
+
     std::unordered_map<std::string, Square, CustomHash> square_map = brd.getSquareMap();
     std::cout << "coord: n, s, e, w, ne, nw, se, sw;" << std::endl;
     for(int rank = 0; rank<8; rank++){
@@ -69,6 +75,8 @@ void BoardTests::squareLocTest(Board& brd){
             std::cout << key << ": " << nstr << ", " << sstr << ", " << estr << ", " << wstr << ", " << nestr << ", " << nwstr << ", " << sestr << ", " << swstr << ";" << std::endl;
         }
     }
+
+    std::cout << std::endl;
 }
 
 void BoardTests::parseMoveTest(Board& brd){
@@ -91,6 +99,44 @@ void BoardTests::parseMoveTest(Board& brd){
     std::cout << std::endl;
 }
 
+void BoardTests::pieceMapTest(Board& brd){
+    std::cout << std::endl;
+
+    std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > myMap = brd.getPieceMap();
+    
+    std::cout << "Rooks: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[R].begin(); it != myMap[R].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Knights: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[N].begin(); it != myMap[N].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Bishops: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[B].begin(); it != myMap[B].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Kings: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[B].begin(); it != myMap[B].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Queens: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[Q].begin(); it != myMap[Q].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Pawns: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[p].begin(); it != myMap[p].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
     usleep(500000);
@@ -98,8 +144,9 @@ void BoardTests::runTests(){
     Board myBoard;
 
     // squareLocTest(myBoard);
-    // pieceListTest(myBoard);
-    parseMoveTest(myBoard);
+    pieceListTest(myBoard);
+    // parseMoveTest(myBoard);
+    // pieceMapTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

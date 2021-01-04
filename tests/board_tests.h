@@ -9,6 +9,7 @@ class BoardTests : public Test{
         void pieceListTest(Board&);
         void squareLocTest(Board&);
         void parseMoveTest(Board&);
+        void pieceMapTest(Board&);
     public:
         void runTests();
 };

@@ -1,6 +1,7 @@
 #include "chess.h"
 #include <string>
 #include <unordered_map>
+#include <list>
 
 #ifndef board
 #define board
@@ -64,6 +65,10 @@ class Board{
 
         // The board's main datatype (this is "the board" in a conventional sense)
         std::unordered_map<std::string, Square, CustomHash> square_map;
+
+        // Map from piece type to Piece pointers (i.e. K --> [(King, e2, etc.)])
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > piece_map;
+
     public:
         Board();
         void makeMove();
@@ -71,6 +76,7 @@ class Board{
         Piece* getHeadPiece();
         Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash> getSquareMap();
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getPieceMap();
 };
 
 #endif
