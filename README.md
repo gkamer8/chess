@@ -10,6 +10,7 @@ The file chess.cpp contains main and begins by prompting the user for a color. T
 
 The board is internally represented as an unordered map called square_map from strings (algebraic coordinates) to Square structs, which store, among other things, pointers adjacent squares in the map. The squares also store pointers to Piece structs. The piece structs store pointers to other pieces in the form of a doubly linked list. The head of the list is stored as the head_piece variable.
 
+`
 | Square <--
 |   |
 | Square <-- 
@@ -22,3 +23,4 @@ The board is internally represented as an unordered map called square_map from s
        \ _________       \ ____
                   \            \
 | head_piece <--> Piece <--> Piece <--> ...
+`
