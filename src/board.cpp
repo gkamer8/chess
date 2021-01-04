@@ -146,6 +146,28 @@ bool Board::isLegal(std::string move){
     return true;  // placeholder
 }
 
+struct Move Board::parseMove(std::string move){
+    Move parsedMove;
+
+    // TODO: Custom exceptions
+
+    // If the move is < 2 chars, throw it out.
+    if(move.length() < 2){
+        throw "Move illformed";
+    }
+
+    // Is the move ks castles?
+    if(move == "O-O" || move == "0-0"){
+        parsedMove.ks_castle = true;
+        parsedMove.qs_castle = false;
+        parsedMove.piece = square_map["e1"].piece;
+        parsedMove.to = &square_map["g1"];
+        return parsedMove;
+    }
+
+    throw "Move illformed";
+}
+
 Piece* Board::getHeadPiece(){
     return &head_piece;
 }

@@ -5,7 +5,7 @@
 
 void Test::runTests(){
     std::cout << "Running all tests..." << std::endl;
-    usleep(2000000);  // Unix system sleep command (this is for Mac) - in microseconds
+    usleep(500000);  // Unix system sleep command (this is for Mac) - in microseconds
     
     BoardTests boardTests;
     boardTests.runTests();

@@ -71,13 +71,35 @@ void BoardTests::squareLocTest(Board& brd){
     }
 }
 
+void BoardTests::parseMoveTest(Board& brd){
+    std::cout << std::endl;
+
+    std::string move = "0-0";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << exp << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
-    usleep(1000000);
+    usleep(500000);
 
     Board myBoard;
-    squareLocTest(myBoard);
-    pieceListTest(myBoard);
+
+    // squareLocTest(myBoard);
+    // pieceListTest(myBoard);
+    parseMoveTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

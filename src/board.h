@@ -37,9 +37,8 @@ struct Piece{
 struct Move{
     bool qs_castle;  // whether the move is a kingside castle
     bool ks_castle;  // whether the move is a queenside castle
-    Piece piece;  // piece being moved
-    bool check;  // whether the move results in check
-    bool checkmate;  // whether the move results in checkmate
+    Piece* piece;  // piece being moved (includes current square)
+    Square* to;  // where the piece is moving to
 };
 
 // For optimization - keys are simply algebraic coordinates; no need for complication
@@ -58,8 +57,6 @@ class Board{
         bool white_qs_castle_eligible;
         bool black_qs_castle_eligible;
         bool check;
-        void squareLocTest();
-        void pieceListTest();
 
         // Doubly linked list for keeping track of pieces
         // Pieces should be removed as they are captured
@@ -72,6 +69,7 @@ class Board{
         void makeMove();
         bool isLegal(std::string);
         Piece* getHeadPiece();
+        Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash> getSquareMap();
 };
 
