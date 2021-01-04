@@ -4,59 +4,23 @@
 #include <iostream>
 #include <unordered_map>
 
-enum piece_t {p, Q, K, N, B, R};
-
-struct Piece;  // Because of cross dependency
-
-struct Square{
-    char name[2];  // ex. "b4"
-    char file;  // ex. 'b'
-    int rank;  // ex. 4
-
-    Square* n;  // north
-    Square* s;  // south
-    Square* e;  // east
-    Square* w;  // west
-    Square* nw;  // northwest
-    Square* ne;  // northeast
-    Square* se;  // southeast
-    Square* sw;  // southwest
-
-    // For knight moves
-    Square* nne;  // north-north-east
-    Square* nnw;  // north-north-west
-    Square* nee;  // north-east-east
-    Square* nww;  // north-west-west
-    Square* sww;  // south-west-west
-    Square* see;  // south-east-east
-    Square* sse;  // south-south-east
-    Square* ssw;  // south-south-west
-
-    Piece* piece;  // Piece on the square
-};
-
-struct Piece{
-    Square* square;  // location of the piece
-    piece_t type;  // piece type (p, Q, R, etc.)
-    colors_t owner;  // white or black
-    Piece* next;  // For doubly linked list – not guaranteed to be any specific piece
-    Piece* prev;  // SAA
-};
-
-struct Move{
-    bool qs_castle;  // whether the move is a kingside castle
-    bool ks_castle;  // whether the move is a queenside castle
-    Piece piece;  // piece being moved
-    bool check;  // whether the move results in check
-    bool checkmate;  // whether the move results in checkmate
-};
-
-// For optimization - keys are simply algebraic coordinates; no need for complication
-struct CustomHash {
-    size_t operator()(const char coord[2]) const {
-        return ((coord[0] - 'a') * 8) + (coord[1] - '1');
+// for tests
+std::string piece_to_string(piece_t pie){
+    switch(pie){
+        case p:
+            return "pawn";
+        case Q:
+            return "Queen";
+        case K:
+            return "King";
+        case N:
+            return "Knight";
+        case R:
+            return "Rook";
+        case B:
+            return "Bishop";
     }
-};
+}
 
 Board::Board(){
     move_color = white;
@@ -67,62 +31,131 @@ Board::Board(){
     white_qs_castle_eligible = true;
     black_qs_castle_eligible = true;
 
-    // The board's main datatype (this is "the board" in a conventional sense)
-    std::unordered_map<char[2], Square, CustomHash> square_map;
-    
-    // Doubly linked list for keeping track of pieces
-    // Pieces should be removed as they are captured
-    Piece head_piece;
-
     // Initialize board
-    for(int rank; rank<8; rank++){
+    for(int rank = 0; rank<8; rank++){
         for(char file = 'a'; file<'i'; file++){
-            char key[2] = {file, (char)rank};
+            std::string key = "";
+            key += file;
+            key += std::to_string(rank + 1);
 
             Square new_square;
             new_square.file = file;
             new_square.rank = rank;
-            std::strcpy(new_square.name, key);
+            new_square.name = key;
             if(rank == 6 || rank == 1){
-                Piece pie;
-                pie.square = &new_square;
-                pie.type = p;
-                pie.owner = rank == 6 ? black : white;
-                new_square.piece = &pie;
+                Piece* pie_ptr = new Piece();
+                pie_ptr->square = &new_square;
+                pie_ptr->type = p;
+                pie_ptr->owner = rank == 6 ? black : white;
+                new_square.piece = pie_ptr;
             }
             else if(rank == 0 || rank == 7){
-                Piece pie;
-                pie.square = &new_square;
+                Piece* pie_ptr = new Piece();
                 switch(file){
                     case 'a':
                     case 'h':
-                        pie.type = R;
+                        pie_ptr->type = R;
                         break;
                     case 'b':
                     case 'g':
-                        pie.type = N;
+                        pie_ptr->type = N;
                         break;
                     case 'c':
                     case 'f':
-                        pie.type = B;
+                        pie_ptr->type = B;
                         break;
                     case 'd':
-                        pie.type = Q;
+                        pie_ptr->type = Q;
                         break;
                     case 'e':
-                        pie.type = K;
+                        pie_ptr->type = K;
                 }
-                pie.owner = rank == 7 ? black : white;
-                new_square.piece = &pie;
+                pie_ptr->owner = rank == 7 ? black : white;
+                new_square.piece = pie_ptr;
             }
-            square_map.at(key) = new_square;
+            else{
+                new_square.piece = nullptr;
+            }
+            square_map[key] = new_square;
+            if(square_map[key].piece != nullptr){
+                square_map[key].piece->square = &square_map[key];
+            }
         }
     }
 
     // Now add attributes that point to other squares
+    for(int rank = 0; rank<8; rank++){
+        for(char file = 'a'; file<'i'; file++){
+            std::string key = "";
+            key += file;
+            key += std::to_string(rank + 1);
+
+            std::string nkey = "";
+            nkey += file;
+            nkey += std::to_string(rank + 2);
+            square_map[key].n = rank == 7 ? nullptr : &(square_map[nkey]);
+
+            std::string skey = "";
+            skey += file;
+            skey += std::to_string(rank);
+            square_map[key].s = rank == 0 ? nullptr : &(square_map[skey]);
+
+            std::string ekey = "";
+            ekey += (file + 1);
+            ekey += std::to_string(rank + 1);
+            square_map[key].e = file == 'h' ? nullptr : &(square_map[ekey]);
+
+            std::string wkey = "";
+            wkey += (file - 1);
+            wkey += std::to_string(rank + 1);
+            square_map[key].w = file == 'a' ? nullptr : &(square_map[wkey]);
+
+            std::string nekey = "";
+            nekey += (file + 1);
+            nekey += std::to_string(rank + 2);
+            square_map[key].ne = (rank == 7 || file == 'h') ? nullptr : &(square_map[nekey]);
+
+            std::string nwkey = "";
+            nwkey += (file - 1);
+            nwkey += std::to_string(rank + 2);
+            square_map[key].nw = (rank == 7 || file == 'a') ? nullptr : &(square_map[nwkey]);
+
+            std::string sekey = "";
+            sekey += (file + 1);
+            sekey += std::to_string(rank);
+            square_map[key].se = (rank == 0 || file == 'h') ? nullptr : &(square_map[sekey]);
+
+            std::string swkey = "";
+            swkey += (file - 1);
+            swkey += std::to_string(rank);
+            square_map[key].sw = (rank == 0 || file == 'a') ? nullptr : &(square_map[swkey]);
+        }
+    }
 
     // Now put together the piece list
 
+    Piece* current_piece;
+    for(int rank = 0; rank<8; rank++){
+        for(char file = 'a'; file<'i'; file++){
+            std::string key = "";
+            key += file;
+            key += std::to_string(rank + 1);
+
+            if(rank == 0 && file == 'a'){
+                // Should be a rook
+                head_piece.next = square_map[key].piece;
+                current_piece = head_piece.next;
+                current_piece->prev = &head_piece;
+            }
+            else if(square_map[key].piece != nullptr){
+                current_piece->next = square_map[key].piece;
+                current_piece->next->prev = current_piece;
+                current_piece = current_piece->next;
+            }
+        }
+    }
+
+    runTests();
 }
 
 void Board::makeMove(){
@@ -131,5 +164,58 @@ void Board::makeMove(){
 
 bool Board::isLegal(std::string move){
     return true;  // placeholder
+}
+
+void Board::pieceListTest(){
+    Piece current_piece = *(head_piece.next);
+    bool gone_forward = false;
+    while(true){
+        std::cout << piece_to_string(current_piece.type) << ", " << current_piece.square->name << ";" << std::endl;
+        if(gone_forward){
+            // Note: the first piece has head piece as prev
+            if(current_piece.prev->prev == nullptr){
+                break;
+            }
+            else{
+                current_piece = *current_piece.prev;
+            }
+        }
+        else{
+            if(current_piece.next == nullptr){
+                gone_forward = true;
+            }
+            else{
+                current_piece = *current_piece.next;
+            }
+        }
+    }
+}
+
+void Board::squareLocTest(){
+    std::cout << "coord: n, s, e, w, ne, nw, se, sw;" << std::endl;
+    for(int rank = 0; rank<8; rank++){
+        for(char file = 'a'; file<'i'; file++){
+            // check
+            std::string key = "";
+            key += file;
+            key += std::to_string(rank + 1);
+
+            std::string nstr = square_map[key].n == nullptr ? "" : square_map[key].n->name;
+            std::string sstr = square_map[key].s == nullptr ? "" : square_map[key].s->name;
+            std::string estr = square_map[key].e == nullptr ? "" : square_map[key].e->name;
+            std::string wstr = square_map[key].w == nullptr ? "" : square_map[key].w->name;
+            std::string nestr = square_map[key].ne == nullptr ? "" : square_map[key].ne->name;
+            std::string nwstr = square_map[key].nw == nullptr ? "" : square_map[key].nw->name;
+            std::string sestr = square_map[key].se == nullptr ? "" : square_map[key].se->name;
+            std::string swstr = square_map[key].sw == nullptr ? "" : square_map[key].sw->name;
+
+            std::cout << key << ": " << nstr << ", " << sstr << ", " << estr << ", " << wstr << ", " << nestr << ", " << nwstr << ", " << sestr << ", " << swstr << ";" << std::endl;
+        }
+    }
+}
+
+void Board::runTests(){
+    // squareLocTest();
+    pieceListTest();
 }
 
