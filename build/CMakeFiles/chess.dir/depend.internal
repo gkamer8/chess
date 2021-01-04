@@ -10,8 +10,21 @@ CMakeFiles/chess.dir/src/chess.cpp.o
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 CMakeFiles/chess.dir/src/cpu.cpp.o
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp
  /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+CMakeFiles/chess.dir/tests/board_tests.cpp.o
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.cpp
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
+CMakeFiles/chess.dir/tests/main_tests.cpp.o
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.h
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.cpp
+ /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h

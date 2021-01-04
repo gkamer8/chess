@@ -3,6 +3,7 @@
 #include "chess.h"
 #include "cpu.h"
 #include "board.h"
+#include "../tests/main_tests.h"
 
 using namespace std;
 
@@ -10,7 +11,15 @@ colors_t cpu_color;
 colors_t prompt_color();
 bool cpu_turn = false;
 
+bool test_run = true;
+
 int main(){
+
+    if(test_run){
+        Test allTests;
+        allTests.runTests();
+        exit(0);
+    }
 
     // Instantiate a board
     Board brd;

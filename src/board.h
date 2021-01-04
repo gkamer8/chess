@@ -71,7 +71,8 @@ class Board{
         Board();
         void makeMove();
         bool isLegal(std::string);
-        void runTests();
+        Piece* getHeadPiece();
+        std::unordered_map<std::string, Square, CustomHash> getSquareMap();
 };
 
 #endif

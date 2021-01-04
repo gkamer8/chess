@@ -223,6 +223,60 @@ src/cpu.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/src/cpu.cpp.s
 .PHONY : src/cpu.cpp.s
 
+tests/board_tests.o: tests/board_tests.cpp.o
+
+.PHONY : tests/board_tests.o
+
+# target to build an object file
+tests/board_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/board_tests.cpp.o
+.PHONY : tests/board_tests.cpp.o
+
+tests/board_tests.i: tests/board_tests.cpp.i
+
+.PHONY : tests/board_tests.i
+
+# target to preprocess a source file
+tests/board_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/board_tests.cpp.i
+.PHONY : tests/board_tests.cpp.i
+
+tests/board_tests.s: tests/board_tests.cpp.s
+
+.PHONY : tests/board_tests.s
+
+# target to generate assembly for a file
+tests/board_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/board_tests.cpp.s
+.PHONY : tests/board_tests.cpp.s
+
+tests/main_tests.o: tests/main_tests.cpp.o
+
+.PHONY : tests/main_tests.o
+
+# target to build an object file
+tests/main_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/main_tests.cpp.o
+.PHONY : tests/main_tests.cpp.o
+
+tests/main_tests.i: tests/main_tests.cpp.i
+
+.PHONY : tests/main_tests.i
+
+# target to preprocess a source file
+tests/main_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/main_tests.cpp.i
+.PHONY : tests/main_tests.cpp.i
+
+tests/main_tests.s: tests/main_tests.cpp.s
+
+.PHONY : tests/main_tests.s
+
+# target to generate assembly for a file
+tests/main_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/main_tests.cpp.s
+.PHONY : tests/main_tests.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -241,6 +295,12 @@ help:
 	@echo "... src/cpu.o"
 	@echo "... src/cpu.i"
 	@echo "... src/cpu.s"
+	@echo "... tests/board_tests.o"
+	@echo "... tests/board_tests.i"
+	@echo "... tests/board_tests.s"
+	@echo "... tests/main_tests.o"
+	@echo "... tests/main_tests.i"
+	@echo "... tests/main_tests.s"
 .PHONY : help
 
 
