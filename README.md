@@ -16,7 +16,7 @@ This structure allows for a natural traversal of the board as well as a quick wa
 | Square <--
 |   |
 | Square <--
-| ...        <-- Hash (square_map) <-- algebraic coordinates
+| ...        <-- Hash (<b>square_map</b>) <-- algebraic coordinates
 | Square <--
 |   |   \ ____________
 | Square <--          \
@@ -31,7 +31,7 @@ This structure allows for a natural traversal of the board as well as a quick wa
 |       |               |             |                 |               |
 |   ____|_______________|_____________|____ ...     ____|_______________|___ ...
 |                     |                                         |
-|             Hash (black_piece_map)                 Hash (white_piece_map)
+|             Hash (<b>black_piece_map</b>)                 Hash (<b>white_piece_map</b>)
                           |                                     |
                           |                                     |
               piece types (i.e., p, R)              piece types (i.e., p, R)
