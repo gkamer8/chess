@@ -345,6 +345,28 @@ struct Move Board::parseMove(std::string move){
 
     }
 
+    // Is it a king move?
+    if(move[0] == 'K'){
+        // Has to be three chars
+        if(move.length() != 3){
+            throw "Move illformed";
+        }
+        // Has to be an actual location
+        if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
+            throw "Move illformed";
+        }
+        if(piece_map[K].front()->owner == move_color){
+            parsedMove.piece = piece_map[K].front();
+        }
+        else{
+            parsedMove.piece = piece_map[K].back();
+        }
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = false;
+        parsedMove.to = &square_map[move.substr(1, 2)];
+        return parsedMove;
+    }
+
     throw "Move illformed";
 }
 
