@@ -22,9 +22,9 @@ This structure allows for a natural traversal of the board as well as a quick wa
 | Square <--          \
      \                 \
       \                 \
-       \ _________       \ ___
-   ...    ...      \    ...    \                    ...    ...     ...
-    |      |        \    |      \                    |      |       |
+       \ _______         \ ___
+   ...    ...    \      ...    \                    ...    ...     ...
+    |      |      \      |      \                    |      |       |
 | Piece  Piece  Piece  Piece  Piece  ...           Piece  Piece  Piece  ...
      |     |       |     |        |                   |     |       |
 | [Piece*, ...] [Piece*, ...]  [Piece*, ...] ...   [Piece*, ...] [Piece*, ...] ...
@@ -34,7 +34,7 @@ This structure allows for a natural traversal of the board as well as a quick wa
 |             Hash (black_piece_map)                 Hash (white_piece_map)
                           |                                     |
                           |                                     |
-              piece types (i.e., p, R, N, etc.)     piece types (i.e., p, R, N, etc.)
+              piece types (i.e., p, R)              piece types (i.e., p, R)
 
 </pre>
 
