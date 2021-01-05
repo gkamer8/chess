@@ -374,6 +374,70 @@ struct Move Board::parseMove(std::string move){
         return parsedMove;
     }
 
+    // Is it a Queen move?
+    if(move[0] == 'Q'){
+        // Is it disambiguated? (length 4)
+        if(move.length() == 4 && (move[1] >= 'a' && move[1] <= 'h' || move[1 >= '1' && move[1] <= '8'])){
+            // Has to be an actual location
+            if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
+                throw "Move illformed";
+            }
+            // Find the piece
+            parsedMove.piece = nullptr;
+            for(std::list<Piece*>::iterator it = piece_map[Q].begin(); it != piece_map[Q].end(); it++){
+                if(std::isdigit(move[1])){
+                    if(move[1] == ('0' + (*it)->square->rank+1)){
+                        parsedMove.piece = *it;
+                        break;
+                    }
+                }
+                else{
+                    if(move[1] == (*it)->square->file){
+                        parsedMove.piece = *it;
+                        break;
+                    }
+                }
+            }
+            // Did I find the piece?
+            if(parsedMove.piece == nullptr){
+                throw "Move illformed";
+            }
+            parsedMove.ks_castle = false;
+            parsedMove.qs_castle = false;
+            parsedMove.to = &square_map[move.substr(2, 2)];
+            return parsedMove;
+        }
+        // Is it disambiguated? (length 5)
+        else if(move.length() == 5 && (move[1] >= 'a' && move[1] <= 'h')){
+            // Has to be an actual location (2)
+            if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
+                throw "Move illformed";
+            }
+            if(move[3] < 'a' || move[3] > 'h' || move[4] < '1' || move[4] > '8'){
+                throw "Move illformed";
+            }
+            // There has to actually be a Queen at that location
+            std::string key = "";
+            key += move[1];
+            key += move[2];
+            if(square_map[key].piece == nullptr || square_map[key].piece->owner != move_color || square_map[key].piece->type != Q){
+                throw "Move illformed";
+            }
+            parsedMove.piece = square_map[key].piece;
+            parsedMove.ks_castle = false;
+            parsedMove.qs_castle = false;
+            parsedMove.to = &square_map[move.substr(2, 2)];
+            return parsedMove;
+        }
+        // Is it a capture?
+        else if(move.length() == 4 && move[1] == 'x'){
+
+        }
+        else{
+
+        }
+    }
+
     throw "Move illformed";
 }
 
