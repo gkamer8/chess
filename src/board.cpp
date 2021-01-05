@@ -308,8 +308,39 @@ struct Move Board::parseMove(std::string move){
             }
         }
         // Is it a pawn capture?
-        if(move.length() == 4){
-            
+        if(move[1] == 'x'){
+            // At this point, it must be 4 characters, i.e. exd4
+            if(move.length() != 4){
+                throw "Move illformed";
+            }
+            // First char has to be an actual file
+            if(move[0] < 'a' || move[0] > 'h'){
+                throw "Move illformed";
+            }
+            // Third and fourth chars must be an actual location
+            if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
+                throw "Move illformed";
+            }
+            // Find the implied position of the pawn being moved
+            char file = move[0];
+            char rank = move_color == white ? move[3] - 1 : move[3] + 1;
+            std::string loc_key = "";
+            loc_key += file;
+            loc_key += rank;
+            if(square_map[loc_key].piece == nullptr || square_map[loc_key].piece->type != p){
+                throw "Move illformed";
+            }
+            else{
+                parsedMove.piece = square_map[loc_key].piece;
+            }
+
+            parsedMove.ks_castle = false;
+            parsedMove.qs_castle = false;
+            parsedMove.to = &square_map[move.substr(2, 2)];
+            return parsedMove;
+        }
+        else{
+            throw "Move illformed";
         }
 
     }
