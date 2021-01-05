@@ -421,6 +421,7 @@ struct Move Board::parseMove(std::string move){
             if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
                 throw "Move illformed";
             }
+            parsedMove.to = &square_map[move.substr(1, 2)];
             // Find the Queen
             // If there's only one queen of that color, it's that one
             std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move_color == white ? &white_piece_map : &black_piece_map;
@@ -429,11 +430,106 @@ struct Move Board::parseMove(std::string move){
             }
             // If there are multiple queens, figure out which one is the correct queen
             else{
-                // TODO
+                // Go from square on out and find the queen
+                bool found = false;
+                // Go north
+                Square* current = parsedMove.to;
+                while(current->n != nullptr){
+                    current = current->n;
+                    if(current->piece != nullptr){
+                        if(current->piece->owner == move_color && current->piece->type == Q){
+                            parsedMove.piece = current->piece;
+                            found = true;
+                            break;
+                        }
+                        break;
+                    }
+                }
+                // Go south
+                if(!found){
+                    current = parsedMove.to;
+                    while(current->s != nullptr){
+                        current = current->s;
+                        if(current->piece != nullptr){
+                            if(current->piece->owner == move_color && current->piece->type == Q){
+                                parsedMove.piece = current->piece;
+                                found = true;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                // Go ne
+                if(!found){
+                    current = parsedMove.to;
+                    while(current->n != nullptr && current->n->e != nullptr){
+                        current = current->n->e;
+                        if(current->piece != nullptr){
+                            if(current->piece->owner == move_color && current->piece->type == Q){
+                                parsedMove.piece = current->piece;
+                                found = true;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Go nw
+                if(!found){
+                    current = parsedMove.to;
+                    while(current->n != nullptr && current->n->w != nullptr){
+                        current = current->n->w;
+                        if(current->piece != nullptr){
+                            if(current->piece->owner == move_color && current->piece->type == Q){
+                                parsedMove.piece = current->piece;
+                                found = true;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Go se
+                if(!found){
+                    current = parsedMove.to;
+                    while(current->s != nullptr && current->s->e != nullptr){
+                        current = current->s->e;
+                        if(current->piece != nullptr){
+                            if(current->piece->owner == move_color && current->piece->type == Q){
+                                parsedMove.piece = current->piece;
+                                found = true;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Go sw
+                if(!found){
+                    current = parsedMove.to;
+                    while(current->s != nullptr && current->s->w != nullptr){
+                        current = current->s->w;
+                        if(current->piece != nullptr){
+                            if(current->piece->owner == move_color && current->piece->type == Q){
+                                parsedMove.piece = current->piece;
+                                found = true;
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if(!found){
+                    throw "Move illformed";
+                }
             }
             parsedMove.ks_castle = false;
             parsedMove.qs_castle = false;
-            parsedMove.to = &square_map[move.substr(1, 2)];
             return parsedMove;
         }
         else{
