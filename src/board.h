@@ -40,6 +40,7 @@ struct Move{
     bool ks_castle;  // whether the move is a queenside castle
     Piece* piece;  // piece being moved (includes current square)
     Square* to;  // where the piece is moving to
+    piece_t promotedTo;
 };
 
 // For optimization - keys are simply algebraic coordinates; no need for complication

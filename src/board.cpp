@@ -201,54 +201,116 @@ struct Move Board::parseMove(std::string move){
 
     // Is it a pawn move?
     if(std::islower(move[0])){
-        // Is it a pawn push?
+        // Is it a pawn push/promotion?
         if(std::isdigit(move[1])){
-            // Pawn push can't be more than 2 characters
-            if(move.length() > 2){
-                throw "Move illformed";
-            }
-            // Has to actually represent a square
-            if(square_map.count(move) == 0){
-                throw "Move illformed";
-            }
-            // Can't be _1 or _2 as white; can't be _7 or _8 as black
-            if(move_color == white){
-                if(move[1] == '1' || move[1] == '2'){
+            // Is it a pawn promotion? (of the form e8Q)
+            if(move.length() == 3){
+                // Has to be an actual file
+                if(move[0] > 'h' || move[0] < 'a'){
                     throw "Move illformed";
                 }
+                // Has to be to the last rank
+                if(move_color == white && move[1] != '8'){
+                    throw "Move illformed";
+                }
+                if(move_color == black && move[1] != '1'){
+                    throw "Move illformed";
+                }
+                // last char has to be N, B, Q, or R
+                if(!(move[2] == 'N' || move[2] == 'Q' || move[2] == 'R' || move[2] == 'B')){
+                    throw "Move illformed";
+                }
+                // Find the pawn being moved
+                Square* current_square = move_color == white ? square_map[move.substr(0, 2)].s : square_map[move.substr(0, 2)].n;
+                while(true){
+                    if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
+                        parsedMove.piece = current_square->piece;
+                        break;
+                    }
+                    if(move_color == white){
+                        if(current_square->s == nullptr){
+                            throw "Move illformed";
+                        }
+                        current_square = current_square->s;
+                    }
+                    else{
+                        if(current_square->n == nullptr){
+                            throw "Move illformed";
+                        }
+                        current_square = current_square->n;
+                    }
+                }
+                // Enter promotedTo
+                switch(move[2]){
+                    case 'Q':
+                        parsedMove.promotedTo = Q;
+                        break;
+                    case 'B':
+                        parsedMove.promotedTo = B;
+                        break;
+                    case 'N':
+                        parsedMove.promotedTo = N;
+                        break;
+                    case 'R':
+                        parsedMove.promotedTo = R;
+                        break;
+                }
+                parsedMove.ks_castle = false;
+                parsedMove.qs_castle = false;
+                parsedMove.to = &square_map[move.substr(0, 2)];
+                return parsedMove; 
             }
+            // Pawn push
             else{
-                if(move[1] == '7' || move[1] == '8'){
+                // Pawn push can't be more than 2 characters
+                if(move.length() > 2){
                     throw "Move illformed";
                 }
-            }
-            // Find the pawn being moved
-            Square* current_square = move_color == white ? square_map[move].s : square_map[move].n;
-            while(true){
-                if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
-                    parsedMove.piece = current_square->piece;
-                    break;
+                // Has to actually represent a square
+                if(square_map.count(move) == 0){
+                    throw "Move illformed";
                 }
+                // Can't be _1, _2 or _8 as white; can't be _7, _8, or _1 as black
                 if(move_color == white){
-                    if(current_square->s == nullptr){
+                    if(move[1] == '1' || move[1] == '2' || move[1] == '8'){
                         throw "Move illformed";
                     }
-                    current_square = current_square->s;
                 }
                 else{
-                    if(current_square->n == nullptr){
+                    if(move[1] == '7' || move[1] == '8' || move[1] == '1'){
                         throw "Move illformed";
                     }
-                    current_square = current_square->n;
                 }
+                // Find the pawn being moved
+                Square* current_square = move_color == white ? square_map[move].s : square_map[move].n;
+                while(true){
+                    if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
+                        parsedMove.piece = current_square->piece;
+                        break;
+                    }
+                    if(move_color == white){
+                        if(current_square->s == nullptr){
+                            throw "Move illformed";
+                        }
+                        current_square = current_square->s;
+                    }
+                    else{
+                        if(current_square->n == nullptr){
+                            throw "Move illformed";
+                        }
+                        current_square = current_square->n;
+                    }
+                }
+                parsedMove.ks_castle = false;
+                parsedMove.qs_castle = false;
+                parsedMove.to = &square_map[move];
+                return parsedMove;
             }
-            parsedMove.ks_castle = false;
-            parsedMove.qs_castle = false;
-            parsedMove.to = &square_map[move];
-            return parsedMove;
         }
-
         // Is it a pawn capture?
+        if(move.length() == 4){
+            
+        }
 
     }
 
