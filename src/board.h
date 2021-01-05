@@ -14,6 +14,7 @@ struct Square{
     std::string name;  // ex. "b4"
     char file;  // ex. 'b'
     int rank;  // ex. 4
+    sq_colors_t clr;  // color of the square - dark or light
 
     Square* n;  // north
     Square* s;  // south

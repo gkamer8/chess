@@ -14,6 +14,7 @@ Board::Board(){
     black_qs_castle_eligible = true;
 
     // Initialize board
+    sq_colors_t clr_track = dark;
     for(int rank = 0; rank<8; rank++){
         for(char file = 'a'; file<'i'; file++){
             std::string key = "";
@@ -24,6 +25,12 @@ Board::Board(){
             new_square.file = file;
             new_square.rank = rank;
             new_square.name = key;
+            new_square.clr = clr_track;
+
+            if(file != 'i'){
+                clr_track = clr_track == dark ? light : dark;
+            }
+
             if(rank == 6 || rank == 1){
                 Piece* pie_ptr = new Piece();
                 pie_ptr->square = &new_square;
