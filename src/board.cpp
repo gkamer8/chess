@@ -121,34 +121,21 @@ Board::Board(){
         }
     }
 
-    // Now put together the piece list
-    Piece* current_piece;
+    // Initialize piece_maps
     for(int rank = 0; rank<8; rank++){
         for(char file = 'a'; file<'i'; file++){
             std::string key = "";
             key += file;
             key += std::to_string(rank + 1);
-
-            if(rank == 0 && file == 'a'){
-                // Should be a rook
-                head_piece.next = square_map[key].piece;
-                head_piece.prev = nullptr;
-                current_piece = head_piece.next;
-                current_piece->prev = &head_piece;
-            }
-            else if(square_map[key].piece != nullptr){
-                current_piece->next = square_map[key].piece;
-                current_piece->next->prev = current_piece;
-                current_piece = current_piece->next;
+            if(square_map[key].piece != nullptr){
+                if(square_map[key].piece->owner == white){
+                    white_piece_map[square_map[key].piece->type].push_front(square_map[key].piece);
+                }
+                else{
+                    black_piece_map[square_map[key].piece->type].push_front(square_map[key].piece);
+                }
             }
         }
-    }
-
-    // Initialize piece_map
-    current_piece = &head_piece;
-    while(current_piece->next != nullptr){
-        current_piece = current_piece->next;
-        piece_map[current_piece->type].push_front(current_piece);
     }
 }
 
@@ -174,15 +161,12 @@ struct Move Board::parseMove(std::string move){
     if(move == "O-O" || move == "0-0"){
         parsedMove.ks_castle = true;
         parsedMove.qs_castle = false;
-        for(std::list<Piece*>::iterator it = piece_map[K].begin(); it != piece_map[K].end(); it++){
-            if(move_color == (*it)->owner){
-                parsedMove.piece = *it;
-            }
-        }
         if(move_color == white){
+            parsedMove.piece = white_piece_map[K].front();
             parsedMove.to = &square_map["g1"];
         }
         else{
+            parsedMove.piece = black_piece_map[K].front();
             parsedMove.to = &square_map["g8"];
         }
         return parsedMove;
@@ -192,15 +176,12 @@ struct Move Board::parseMove(std::string move){
     if(move == "O-O-O" || move == "0-0-0"){
         parsedMove.ks_castle = false;
         parsedMove.qs_castle = true;
-        for(std::list<Piece*>::iterator it = piece_map[K].begin(); it != piece_map[K].end(); it++){
-            if(move_color == (*it)->owner){
-                parsedMove.piece = *it;
-            }
-        }
         if(move_color == white){
+            parsedMove.piece = white_piece_map[K].front();
             parsedMove.to = &square_map["c1"];
         }
         else{
+            parsedMove.piece = black_piece_map[K].front();
             parsedMove.to = &square_map["c8"];
         }
         return parsedMove;
@@ -362,11 +343,11 @@ struct Move Board::parseMove(std::string move){
         if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
             throw "Move illformed";
         }
-        if(piece_map[K].front()->owner == move_color){
-            parsedMove.piece = piece_map[K].front();
+        if(white == move_color){
+            parsedMove.piece = white_piece_map[K].front();
         }
         else{
-            parsedMove.piece = piece_map[K].back();
+            parsedMove.piece = black_piece_map[K].front();
         }
         parsedMove.ks_castle = false;
         parsedMove.qs_castle = false;
@@ -377,14 +358,15 @@ struct Move Board::parseMove(std::string move){
     // Is it a Queen move?
     if(move[0] == 'Q'){
         // Is it disambiguated? (length 4)
-        if(move.length() == 4 && (move[1] >= 'a' && move[1] <= 'h' || move[1 >= '1' && move[1] <= '8'])){
+        if(move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1 >= '1' && move[1] <= '8']))){
             // Has to be an actual location
             if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
                 throw "Move illformed";
             }
             // Find the piece
             parsedMove.piece = nullptr;
-            for(std::list<Piece*>::iterator it = piece_map[Q].begin(); it != piece_map[Q].end(); it++){
+            std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move_color == white ? &white_piece_map : &black_piece_map;
+            for(std::list<Piece*>::iterator it = (*piece_map)[Q].begin(); it != (*piece_map)[Q].end(); it++){
                 if(std::isdigit(move[1])){
                     if(move[1] == ('0' + (*it)->square->rank+1)){
                         parsedMove.piece = *it;
@@ -426,15 +408,36 @@ struct Move Board::parseMove(std::string move){
             parsedMove.piece = square_map[key].piece;
             parsedMove.ks_castle = false;
             parsedMove.qs_castle = false;
-            parsedMove.to = &square_map[move.substr(2, 2)];
+            parsedMove.to = &square_map[move.substr(3, 2)];
             return parsedMove;
         }
         // Is it a capture?
         else if(move.length() == 4 && move[1] == 'x'){
 
         }
+        // Is it a regular queen move?
+        else if(move.length() == 3){
+            // Has to be a real square
+            if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
+                throw "Move illformed";
+            }
+            // Find the Queen
+            // If there's only one queen of that color, it's that one
+            std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move_color == white ? &white_piece_map : &black_piece_map;
+            if((*piece_map)[Q].size() == 1){
+                parsedMove.piece = (*piece_map)[Q].front();
+            }
+            // If there are multiple queens, figure out which one is the correct queen
+            else{
+                // TODO
+            }
+            parsedMove.ks_castle = false;
+            parsedMove.qs_castle = false;
+            parsedMove.to = &square_map[move.substr(1, 2)];
+            return parsedMove;
+        }
         else{
-
+            throw "Move illformed";
         }
     }
 
@@ -445,15 +448,15 @@ void Board::setMoveColor(colors_t col){
     move_color = col;
 }
 
-Piece* Board::getHeadPiece(){
-    return &head_piece;
-}
-
 std::unordered_map<std::string, Square, CustomHash> Board::getSquareMap(){
     return square_map;
 }
 
-std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getPieceMap(){
-    return piece_map;
+std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getBlackPieceMap(){
+    return black_piece_map;
+}
+
+std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getWhitePieceMap(){
+    return white_piece_map;
 }
 

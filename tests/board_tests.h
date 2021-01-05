@@ -6,7 +6,6 @@
 
 class BoardTests : public Test{
     private:
-        void pieceListTest(Board&);
         void squareLocTest(Board&);
         void parseMoveTest(Board&);
         void pieceMapTest(Board&);

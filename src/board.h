@@ -32,8 +32,6 @@ struct Piece{
     Square* square;  // location of the piece
     piece_t type;  // piece type (p, Q, R, etc.)
     colors_t owner;  // white or black
-    Piece* next;  // For doubly linked list – not guaranteed to be any specific piece
-    Piece* prev;  // SAA
 };
 
 struct Move{
@@ -61,24 +59,21 @@ class Board{
         bool black_qs_castle_eligible;
         bool check;
 
-        // Doubly linked list for keeping track of pieces
-        // Pieces should be removed as they are captured
-        Piece head_piece;
-
         // The board's main datatype (this is "the board" in a conventional sense)
         std::unordered_map<std::string, Square, CustomHash> square_map;
 
-        // Map from piece type to Piece pointers (i.e. K --> [(King, e2, etc.)])
-        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > piece_map;
+        // Maps from piece type to Piece pointers (i.e. K --> [(King, e2, etc.)])
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > white_piece_map;
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > black_piece_map;
 
     public:
         Board();
         void makeMove();
         bool isLegal(std::string);
-        Piece* getHeadPiece();
         Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash> getSquareMap();
-        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getPieceMap();
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getBlackPieceMap();
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getWhitePieceMap();
         void setMoveColor(colors_t);
 };
 

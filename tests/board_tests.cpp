@@ -21,36 +21,6 @@ std::string piece_to_string(piece_t pie){
     }
 }
 
-void BoardTests::pieceListTest(Board& brd){
-    std::cout << std::endl;
-
-    Piece head_piece = *brd.getHeadPiece();
-    Piece current_piece = *(head_piece.next);
-    bool gone_forward = false;
-    while(true){
-        std::cout << piece_to_string(current_piece.type) << ", " << current_piece.square->name << ";" << std::endl;
-        if(gone_forward){
-            // Note: the first piece has head piece as prev
-            if(current_piece.prev->prev == nullptr){
-                break;
-            }
-            else{
-                current_piece = *current_piece.prev;
-            }
-        }
-        else{
-            if(current_piece.next == nullptr){
-                gone_forward = true;
-            }
-            else{
-                current_piece = *current_piece.next;
-            }
-        }
-    }
-
-    std::cout << std::endl;
-}
-
 void BoardTests::squareLocTest(Board& brd){
     std::cout << std::endl;
 
@@ -207,13 +177,81 @@ void BoardTests::parseMoveTest(Board& brd){
     }
     std::cout << std::endl;
 
+    move = "Qdd5";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
+    move = "Qd1d5";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
     std::cout << std::endl;
 }
 
 void BoardTests::pieceMapTest(Board& brd){
     std::cout << std::endl;
 
-    std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > myMap = brd.getPieceMap();
+    std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > myMap = brd.getBlackPieceMap();
+
+    std::cout << "Black: " << std::endl; 
+    
+    std::cout << "Rooks: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[R].begin(); it != myMap[R].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Knights: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[N].begin(); it != myMap[N].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Bishops: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[B].begin(); it != myMap[B].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Kings: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[B].begin(); it != myMap[B].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Queens: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[Q].begin(); it != myMap[Q].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << "Pawns: " << std::endl;
+    for(std::list<Piece*>::iterator it = myMap[p].begin(); it != myMap[p].end(); it++){
+        std::cout << ((*it)->square->name) << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    myMap = brd.getWhitePieceMap();
+
+    std::cout << "White: " << std::endl; 
     
     std::cout << "Rooks: " << std::endl;
     for(std::list<Piece*>::iterator it = myMap[R].begin(); it != myMap[R].end(); it++){
@@ -255,9 +293,8 @@ void BoardTests::runTests(){
     Board myBoard;
 
     // squareLocTest(myBoard);
-    // pieceListTest(myBoard);
-    parseMoveTest(myBoard);
-    // pieceMapTest(myBoard);
+    // parseMoveTest(myBoard);
+    pieceMapTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
