@@ -554,6 +554,18 @@ void Board::removePiece(Piece* pie){
     delete pie;
 }
 
+void Board::addPiece(Piece& pie){
+    // Add to piece map
+    if(pie.owner == white){
+        white_piece_map[pie.type].push_front(&pie);
+    }
+    else{
+        black_piece_map[pie.type].push_front(&pie);
+    }
+    // Add to the square
+    pie.square->piece = &pie;
+}
+
 std::unordered_map<std::string, Square, CustomHash> Board::getSquareMap(){
     return square_map;
 }
