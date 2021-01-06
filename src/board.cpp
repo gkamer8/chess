@@ -309,8 +309,8 @@ struct Move Board::parseMove(std::string move){
             if(move[0] < 'a' || move[0] > 'h'){
                 throw "Move illformed";
             }
-            // Third and fourth chars must be an actual location
-            if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
+            // Third and fourth chars must be an actual location above 2
+            if(move[2] < 'a' || move[2] > 'h' || move[3] <= '2' || move[3] > '8'){
                 throw "Move illformed";
             }
             // Find the implied position of the pawn being moved
@@ -319,7 +319,7 @@ struct Move Board::parseMove(std::string move){
             std::string loc_key = "";
             loc_key += file;
             loc_key += rank;
-            if(square_map[loc_key].piece == nullptr || square_map[loc_key].piece->type != p){
+            if(square_map[loc_key].piece == nullptr || square_map[loc_key].piece->type != p || square_map[loc_key].piece->owner != move_color){
                 throw "Move illformed";
             }
             else{
@@ -339,6 +339,9 @@ struct Move Board::parseMove(std::string move){
 
     // Is it a king move?
     if(move[0] == 'K'){
+        if(move[1] == 'x'){
+            move.erase(1, 1);
+        }
         // Has to be three chars
         if(move.length() != 3){
             throw "Move illformed";
@@ -347,11 +350,24 @@ struct Move Board::parseMove(std::string move){
         if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
             throw "Move illformed";
         }
-        if(white == move_color){
-            parsedMove.piece = white_piece_map[K].front();
+        // King has to be next to the target square
+        std::string key = "";
+        key += move[1];
+        key += move[2];
+        if(square_map[key].s != nullptr && square_map[key].s->piece != nullptr && square_map[key].s->piece->type == K && square_map[key].s->piece->owner == move_color){
+            parsedMove.piece = square_map[key].s->piece;
+        }
+        else if(square_map[key].w != nullptr && square_map[key].w->piece != nullptr && square_map[key].w->piece->type == K && square_map[key].w->piece->owner == move_color){
+            parsedMove.piece = square_map[key].w->piece;
+        }
+        else if(square_map[key].n != nullptr && square_map[key].n->piece != nullptr && square_map[key].n->piece->type == K && square_map[key].n->piece->owner == move_color){
+            parsedMove.piece = square_map[key].n->piece;
+        }
+        else if(square_map[key].e != nullptr && square_map[key].e->piece != nullptr && square_map[key].e->piece->type == K && square_map[key].e->piece->owner == move_color){
+            parsedMove.piece = square_map[key].e->piece;
         }
         else{
-            parsedMove.piece = black_piece_map[K].front();
+            throw "Move illformed";
         }
         parsedMove.ks_castle = false;
         parsedMove.qs_castle = false;
@@ -361,192 +377,176 @@ struct Move Board::parseMove(std::string move){
 
     // Is it a Queen move?
     if(move[0] == 'Q'){
-        // Is it disambiguated? (length 4)
-        if((move.length() == 5 && move[2] == 'x' && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8'))) || (move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8')))){
-            // if it's a capture, just get rid of the x
-            if(move[2] == 'x'){
-                move.erase(2, 1);
-            }
-            // Has to be an actual location
-            if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
-                throw "Move illformed";
-            }
-            // Find the piece
-            parsedMove.piece = nullptr;
-            std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move_color == white ? &white_piece_map : &black_piece_map;
-            for(std::list<Piece*>::iterator it = (*piece_map)[Q].begin(); it != (*piece_map)[Q].end(); it++){
-                if(std::isdigit(move[1])){
-                    if(move[1] == ('0' + (*it)->square->rank+1)){
-                        parsedMove.piece = *it;
-                        break;
-                    }
-                }
-                else{
-                    if(move[1] == (*it)->square->file){
-                        parsedMove.piece = *it;
-                        break;
-                    }
-                }
-            }
-            // Did I find the piece?
-            if(parsedMove.piece == nullptr){
-                throw "Move illformed";
-            }
-            parsedMove.ks_castle = false;
-            parsedMove.qs_castle = false;
-            parsedMove.to = &square_map[move.substr(2, 2)];
-            return parsedMove;
-        }
-        // Is it disambiguated? (length 5)
-        else if((move.length() == 5 && (move[1] >= 'a' && move[1] <= 'h')) || (move.length() == 6 && move[3] == 'x' && (move[1] >= 'a' && move[1] <= 'h'))){
-            // if it's a capture, just get rid of the x
-            if(move[3] == 'x'){
-                move.erase(3, 1);
-            }
-            // Has to be an actual location (2)
-            if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
-                throw "Move illformed";
-            }
-            if(move[3] < 'a' || move[3] > 'h' || move[4] < '1' || move[4] > '8'){
-                throw "Move illformed";
-            }
-            // There has to actually be a Queen at that location
-            std::string key = "";
-            key += move[1];
-            key += move[2];
-            if(square_map[key].piece == nullptr || square_map[key].piece->owner != move_color || square_map[key].piece->type != Q){
-                throw "Move illformed";
-            }
-            parsedMove.piece = square_map[key].piece;
-            parsedMove.ks_castle = false;
-            parsedMove.qs_castle = false;
-            parsedMove.to = &square_map[move.substr(3, 2)];
-            return parsedMove;
-        }
-        // Is it a regular queen move?
-        else if(move.length() == 3 || (move.length() == 4 && move[1] == 'x')){
-            // if it's a capture, just get rid of the x
-            if(move[1] == 'x'){
-                move.erase(1, 1);
-            }
-            // Has to be a real square
-            if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
-                throw "Move illformed";
-            }
-            parsedMove.to = &square_map[move.substr(1, 2)];
-            // Find the Queen
-            // If there's only one queen of that color, it's that one
-            std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move_color == white ? &white_piece_map : &black_piece_map;
-            if((*piece_map)[Q].size() == 1){
-                parsedMove.piece = (*piece_map)[Q].front();
-            }
-            // If there are multiple queens, figure out which one is the correct queen
-            else{
-                // Go from square on out and find the queen
-                bool found = false;
-                // Go north
-                Square* current = parsedMove.to;
-                while(current->n != nullptr){
-                    current = current->n;
-                    if(current->piece != nullptr){
-                        if(current->piece->owner == move_color && current->piece->type == Q){
-                            parsedMove.piece = current->piece;
-                            found = true;
-                            break;
-                        }
-                        break;
-                    }
-                }
-                // Go south
-                if(!found){
-                    current = parsedMove.to;
-                    while(current->s != nullptr){
-                        current = current->s;
-                        if(current->piece != nullptr){
-                            if(current->piece->owner == move_color && current->piece->type == Q){
-                                parsedMove.piece = current->piece;
-                                found = true;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-                // Go ne
-                if(!found){
-                    current = parsedMove.to;
-                    while(current->n != nullptr && current->n->e != nullptr){
-                        current = current->n->e;
-                        if(current->piece != nullptr){
-                            if(current->piece->owner == move_color && current->piece->type == Q){
-                                parsedMove.piece = current->piece;
-                                found = true;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // Go nw
-                if(!found){
-                    current = parsedMove.to;
-                    while(current->n != nullptr && current->n->w != nullptr){
-                        current = current->n->w;
-                        if(current->piece != nullptr){
-                            if(current->piece->owner == move_color && current->piece->type == Q){
-                                parsedMove.piece = current->piece;
-                                found = true;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // Go se
-                if(!found){
-                    current = parsedMove.to;
-                    while(current->s != nullptr && current->s->e != nullptr){
-                        current = current->s->e;
-                        if(current->piece != nullptr){
-                            if(current->piece->owner == move_color && current->piece->type == Q){
-                                parsedMove.piece = current->piece;
-                                found = true;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                // Go sw
-                if(!found){
-                    current = parsedMove.to;
-                    while(current->s != nullptr && current->s->w != nullptr){
-                        current = current->s->w;
-                        if(current->piece != nullptr){
-                            if(current->piece->owner == move_color && current->piece->type == Q){
-                                parsedMove.piece = current->piece;
-                                found = true;
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                }
-
-                if(!found){
-                    throw "Move illformed";
-                }
-            }
-            parsedMove.ks_castle = false;
-            parsedMove.qs_castle = false;
-            return parsedMove;
-        }
-        else{
+        // Get rid of captures sign
+        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // Get where the move is to
+        std::string loc_key = "";
+        if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
             throw "Move illformed";
         }
+        else{
+            loc_key += move[move.size() - 2];
+        }
+        if(move[move.size() - 1] < '1' || move[move.size() - 1] > '8'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 1];
+        }
+        // Deal with disambiguations
+        char disambiguated_file = '\0';
+        char disambiguated_rank = '\0';
+        if(move.size() == 4){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else if(move[1] >= '1' && move[1] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        else if(move.size() == 5){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+            if(move[2] >= '1' && move[2] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        // The square can't be occupied by your own piece
+        if(square_map[loc_key].piece != nullptr && square_map[loc_key].piece->owner == move_color){
+            throw "Move illformed";
+        }
+        // Find the correct queen
+        Square* current;
+        bool found = false;
+        // Check north
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr){
+            current = current->n;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check south
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr){
+            current = current->s;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check west
+        current = &square_map[loc_key];
+        while(!found && current->w != nullptr){
+            current = current->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check east
+        current = &square_map[loc_key];
+        while(!found && current->e != nullptr){
+            current = current->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check ne
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->e != nullptr){
+            current = current->n->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check nw
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->w != nullptr){
+            current = current->n->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check se
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->e != nullptr){
+            current = current->s->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check sw
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->w != nullptr){
+            current = current->s->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == Q){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't have a piece blocking the square.
+            }
+        }
+        if(!found){
+            throw "Move illformed";
+        }
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = false;
+        parsedMove.to = &square_map[loc_key];
+        return parsedMove;
     }
 
     throw "Move illformed";
