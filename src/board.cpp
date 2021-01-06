@@ -210,23 +210,20 @@ struct Move Board::parseMove(std::string move){
                 }
                 // Find the pawn being moved
                 Square* current_square = move_color == white ? square_map[move.substr(0, 2)].s : square_map[move.substr(0, 2)].n;
-                while(true){
-                    if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
-                        parsedMove.piece = current_square->piece;
-                        break;
-                    }
-                    if(move_color == white){
-                        if(current_square->s == nullptr){
-                            throw "Move illformed";
-                        }
-                        current_square = current_square->s;
-                    }
-                    else{
-                        if(current_square->n == nullptr){
-                            throw "Move illformed";
-                        }
-                        current_square = current_square->n;
-                    }
+                if(current_square->piece == nullptr){
+                    // No piece
+                    throw "Move illformed";
+                }
+                else if(current_square->piece->type != p){
+                    // There's a piece but not a pawn
+                    throw "Move illformed";
+                }
+                else if(current_square->piece->owner != move_color){
+                    // The pawn is not the right kind
+                    throw "Move illformed";
+                }
+                else{
+                    parsedMove.piece = current_square->piece;
                 }
                 // Enter promotedTo
                 switch(move[2]){
@@ -271,23 +268,30 @@ struct Move Board::parseMove(std::string move){
                 }
                 // Find the pawn being moved
                 Square* current_square = move_color == white ? square_map[move].s : square_map[move].n;
-                while(true){
-                    if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
-                        parsedMove.piece = current_square->piece;
-                        break;
-                    }
+                if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
+                    parsedMove.piece = current_square->piece;
+                }
+                else if(current_square->piece == nullptr){
                     if(move_color == white){
-                        if(current_square->s == nullptr){
+                        if(current_square->s->piece != nullptr && current_square->s->piece->type == p && current_square->s->piece->owner == white){
+                            parsedMove.piece = current_square->s->piece;
+                        }
+                        else{
                             throw "Move illformed";
                         }
-                        current_square = current_square->s;
                     }
-                    else{
-                        if(current_square->n == nullptr){
+                    if(move_color == black){
+                        if(current_square->n->piece != nullptr && current_square->n->piece->type == p && current_square->n->piece->owner == black){
+                            parsedMove.piece = current_square->n->piece;
+                        }
+                        else{
                             throw "Move illformed";
                         }
-                        current_square = current_square->n;
                     }
+                }
+                else{
+                    // Something blocking the pawn
+                    throw "Move illformed";
                 }
                 parsedMove.ks_castle = false;
                 parsedMove.qs_castle = false;
