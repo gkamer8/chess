@@ -388,7 +388,7 @@ void BoardTests::deletePieceTest(Board& brd){
     }
 
     // Does it get removed from the piece map?
-    if(brd.getWhitePieceMap()[R].size() == 1){
+    if((*brd.getWhitePieceMap())[R].size() == 1){
         std::cout << "Deleting from piece map was a success." << std::endl;
     }
     else if((*brd.getWhitePieceMap())[R].back() == nullptr || (*brd.getWhitePieceMap())[R].front() == nullptr){
@@ -409,10 +409,10 @@ void BoardTests::runTests(){
 
     Board myBoard;
 
-    // squareLocTest(myBoard);
+    squareLocTest(myBoard);
     parseMoveTest(myBoard);
-    // pieceMapTest(myBoard);
-    // deletePieceTest(myBoard);
+    pieceMapTest(myBoard);
+    deletePieceTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
