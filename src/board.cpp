@@ -358,10 +358,10 @@ struct Move Board::parseMove(std::string move){
     // Is it a Queen move?
     if(move[0] == 'Q'){
         // Is it disambiguated? (length 4)
-        if((move.length() == 5 && move[1] == 'x' && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8'))) || (move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8')))){
+        if((move.length() == 5 && move[2] == 'x' && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8'))) || (move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8')))){
             // if it's a capture, just get rid of the x
-            if(move[1] == 'x'){
-                move.erase(1, 1);
+            if(move[2] == 'x'){
+                move.erase(2, 1);
             }
             // Has to be an actual location
             if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
@@ -394,10 +394,10 @@ struct Move Board::parseMove(std::string move){
             return parsedMove;
         }
         // Is it disambiguated? (length 5)
-        else if((move.length() == 5 && (move[1] >= 'a' && move[1] <= 'h')) || (move.length() == 6 && move[1] == 'x' && (move[2] >= 'a' && move[2] <= 'h'))){
+        else if((move.length() == 5 && (move[1] >= 'a' && move[1] <= 'h')) || (move.length() == 6 && move[3] == 'x' && (move[1] >= 'a' && move[1] <= 'h'))){
             // if it's a capture, just get rid of the x
-            if(move[1] == 'x'){
-                move.erase(1, 1);
+            if(move[3] == 'x'){
+                move.erase(3, 1);
             }
             // Has to be an actual location (2)
             if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
@@ -562,27 +562,27 @@ void Board::removePiece(Piece* pie){
     delete pie;
 }
 
-void Board::addPiece(Piece& pie){
+void Board::addPiece(Piece* pie){
     // Add to piece map
-    if(pie.owner == white){
-        white_piece_map[pie.type].push_front(&pie);
+    if(pie->owner == white){
+        white_piece_map[pie->type].push_front(pie);
     }
     else{
-        black_piece_map[pie.type].push_front(&pie);
+        black_piece_map[pie->type].push_front(pie);
     }
     // Add to the square
-    pie.square->piece = &pie;
+    pie->square->piece = pie;
 }
 
-std::unordered_map<std::string, Square, CustomHash> Board::getSquareMap(){
-    return square_map;
+std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){
+    return &square_map;
 }
 
-std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getBlackPieceMap(){
-    return black_piece_map;
+std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* Board::getBlackPieceMap(){
+    return &black_piece_map;
 }
 
-std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > Board::getWhitePieceMap(){
-    return white_piece_map;
+std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* Board::getWhitePieceMap(){
+    return &white_piece_map;
 }
 

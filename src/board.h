@@ -71,12 +71,12 @@ class Board{
         void makeMove();
         bool isLegal(std::string);
         Move parseMove(std::string);
-        std::unordered_map<std::string, Square, CustomHash> getSquareMap();
-        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getBlackPieceMap();
-        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getWhitePieceMap();
+        std::unordered_map<std::string, Square, CustomHash>* getSquareMap();
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* getBlackPieceMap();
+        std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* getWhitePieceMap();
         void setMoveColor(colors_t);
         void removePiece(Piece*);
-        void addPiece(Piece&);
+        void addPiece(Piece*);
 };
 
 #endif

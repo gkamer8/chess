@@ -24,7 +24,7 @@ std::string piece_to_string(piece_t pie){
 void BoardTests::squareLocTest(Board& brd){
     std::cout << std::endl;
 
-    std::unordered_map<std::string, Square, CustomHash> square_map = brd.getSquareMap();
+    std::unordered_map<std::string, Square, CustomHash> square_map = (*brd.getSquareMap());
     std::cout << "coord: n, s, e, w, ne, nw, se, sw;" << std::endl;
     for(int rank = 0; rank<8; rank++){
         for(char file = 'a'; file<'i'; file++){
@@ -226,8 +226,8 @@ void BoardTests::parseMoveTest(Board& brd){
     Piece* play_queen = new Piece();
     play_queen->owner = white;
     play_queen->type = Q;
-    play_queen->square = &brd.getSquareMap()["a3"];
-    brd.addPiece(*play_queen);
+    play_queen->square = &(*brd.getSquareMap())["a3"];
+    brd.addPiece(play_queen);
     try{
         Move mv = brd.parseMove(move);
         std::cout << "Move: " << move << std::endl;
@@ -243,7 +243,7 @@ void BoardTests::parseMoveTest(Board& brd){
     std::cout << std::endl;
 
     move = "Qxd4";
-    brd.removePiece(brd.getSquareMap()["d2"].piece);
+    brd.removePiece((*brd.getSquareMap())["d2"].piece);
     try{
         Move mv = brd.parseMove(move);
         std::cout << "Move: " << move << std::endl;
@@ -259,8 +259,35 @@ void BoardTests::parseMoveTest(Board& brd){
     Piece* add_back_pawn = new Piece();
     add_back_pawn->owner = white;
     add_back_pawn->type = p;
-    add_back_pawn->square = &brd.getSquareMap()["d2"];
-    brd.addPiece(*add_back_pawn);
+    add_back_pawn->square = &(*brd.getSquareMap())["d2"];
+    brd.addPiece(add_back_pawn);
+    brd.removePiece(play_queen);
+    std::cout << std::endl;
+
+    move = "Qa4xd4";
+    play_queen = new Piece();
+    play_queen->owner = white;
+    play_queen->type = Q;
+    play_queen->square = &(*brd.getSquareMap())["a4"];
+    brd.addPiece(play_queen);
+    brd.removePiece((*brd.getSquareMap())["d2"].piece);
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    add_back_pawn = new Piece();
+    add_back_pawn->owner = white;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["d2"];
+    brd.addPiece(add_back_pawn);
     brd.removePiece(play_queen);
     std::cout << std::endl;
 
@@ -270,7 +297,7 @@ void BoardTests::parseMoveTest(Board& brd){
 void BoardTests::pieceMapTest(Board& brd){
     std::cout << std::endl;
 
-    std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > myMap = brd.getBlackPieceMap();
+    std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > myMap = *brd.getBlackPieceMap();
 
     std::cout << "Black: " << std::endl; 
     
@@ -306,7 +333,7 @@ void BoardTests::pieceMapTest(Board& brd){
 
     std::cout << std::endl;
 
-    myMap = brd.getWhitePieceMap();
+    myMap = *brd.getWhitePieceMap();
 
     std::cout << "White: " << std::endl; 
     
@@ -346,17 +373,17 @@ void BoardTests::pieceMapTest(Board& brd){
 void BoardTests::deletePieceTest(Board& brd){
     std::cout << std::endl;
 
-    Piece* toDelete = brd.getSquareMap()["a1"].piece;
+    Piece* toDelete = (*brd.getSquareMap())["a1"].piece;
     brd.removePiece(toDelete);
 
     // Note: if the memory is freed but the pointers aren't erased, this will result in a seg fault!
 
     // Does it get removed from the square properly?
-    if(brd.getSquareMap()["a1"].piece == nullptr){
+    if((*brd.getSquareMap())["a1"].piece == nullptr){
         std::cout << "Deleting from square map was a success." << std::endl;
     }
     else{
-        piece_t dumb = brd.getSquareMap()["a1"].piece->type;
+        piece_t dumb = (*brd.getSquareMap())["a1"].piece->type;
         std::cout << "Piece (" << piece_to_string(dumb) << ") not deleted properly from square map!" << std::endl;
     }
 
@@ -364,12 +391,12 @@ void BoardTests::deletePieceTest(Board& brd){
     if(brd.getWhitePieceMap()[R].size() == 1){
         std::cout << "Deleting from piece map was a success." << std::endl;
     }
-    else if(brd.getWhitePieceMap()[R].back() == nullptr || brd.getWhitePieceMap()[R].front() == nullptr){
+    else if((*brd.getWhitePieceMap())[R].back() == nullptr || (*brd.getWhitePieceMap())[R].front() == nullptr){
         std::cout << "Deleting from piece map was a half success." << std::endl;
     }
     else{
-        std::string dumb1 = brd.getWhitePieceMap()[R].back()->square->name;
-        std::string dumb2 = brd.getWhitePieceMap()[R].front()->square->name;
+        std::string dumb1 = (*brd.getWhitePieceMap())[R].back()->square->name;
+        std::string dumb2 = (*brd.getWhitePieceMap())[R].front()->square->name;
         std::cout << "Piece not deleted properly from piece map!" << " Rooks at: " << dumb1 << ", " << dumb2 << std::endl;
     }
 
