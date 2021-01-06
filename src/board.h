@@ -75,6 +75,7 @@ class Board{
         std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getBlackPieceMap();
         std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> > getWhitePieceMap();
         void setMoveColor(colors_t);
+        void removePiece(Piece*);
 };
 
 #endif

@@ -544,6 +544,16 @@ void Board::setMoveColor(colors_t col){
     move_color = col;
 }
 
+void Board::removePiece(Piece* pie){
+    // Remove from piece map list
+    std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> >* piece_map = pie->owner == white ? &white_piece_map : &black_piece_map;
+    (*piece_map)[pie->type].remove(pie);
+    // Remove from the square
+    pie->square->piece = nullptr;
+    // Free the memory
+    delete pie;
+}
+
 std::unordered_map<std::string, Square, CustomHash> Board::getSquareMap(){
     return square_map;
 }

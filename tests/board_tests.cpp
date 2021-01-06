@@ -286,6 +286,39 @@ void BoardTests::pieceMapTest(Board& brd){
     std::cout << std::endl;
 }
 
+void BoardTests::deletePieceTest(Board& brd){
+    std::cout << std::endl;
+
+    Piece* toDelete = brd.getSquareMap()["a1"].piece;
+    brd.removePiece(toDelete);
+
+    // Note: if the memory is freed but the pointers aren't erased, this will result in a seg fault!
+
+    // Does it get removed from the square properly?
+    if(brd.getSquareMap()["a1"].piece == nullptr){
+        std::cout << "Deleting from square map was a success." << std::endl;
+    }
+    else{
+        piece_t dumb = brd.getSquareMap()["a1"].piece->type;
+        std::cout << "Piece (" << piece_to_string(dumb) << ") not deleted properly from square map!" << std::endl;
+    }
+
+    // Does it get removed from the piece map?
+    if(brd.getWhitePieceMap()[R].size() == 1){
+        std::cout << "Deleting from piece map was a success." << std::endl;
+    }
+    else if(brd.getWhitePieceMap()[R].back() == nullptr || brd.getWhitePieceMap()[R].front() == nullptr){
+        std::cout << "Deleting from piece map was a half success." << std::endl;
+    }
+    else{
+        std::string dumb1 = brd.getWhitePieceMap()[R].back()->square->name;
+        std::string dumb2 = brd.getWhitePieceMap()[R].front()->square->name;
+        std::cout << "Piece not deleted properly from piece map!" << " Rooks at: " << dumb1 << ", " << dumb2 << std::endl;
+    }
+
+    std::cout << std::endl;
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
     usleep(500000);
@@ -294,7 +327,8 @@ void BoardTests::runTests(){
 
     // squareLocTest(myBoard);
     // parseMoveTest(myBoard);
-    pieceMapTest(myBoard);
+    // pieceMapTest(myBoard);
+    deletePieceTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
