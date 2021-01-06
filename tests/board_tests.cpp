@@ -242,7 +242,7 @@ void BoardTests::parseMoveTest(Board& brd){
     }
     std::cout << std::endl;
 
-    move = "Qd4";
+    move = "Qxd4";
     brd.removePiece(brd.getSquareMap()["d2"].piece);
     try{
         Move mv = brd.parseMove(move);

@@ -358,7 +358,7 @@ struct Move Board::parseMove(std::string move){
     // Is it a Queen move?
     if(move[0] == 'Q'){
         // Is it disambiguated? (length 4)
-        if(move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1 >= '1' && move[1] <= '8']))){
+        if(move.length() == 4 && ((move[1] >= 'a' && move[1] <= 'h') || (move[1] >= '1' && move[1] <= '8'))){
             // Has to be an actual location
             if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
                 throw "Move illformed";
@@ -411,12 +411,12 @@ struct Move Board::parseMove(std::string move){
             parsedMove.to = &square_map[move.substr(3, 2)];
             return parsedMove;
         }
-        // Is it a capture?
-        else if(move.length() == 4 && move[1] == 'x'){
-
-        }
-        // Is it a regular queen move?
-        else if(move.length() == 3){
+        // Is it a regular queen move/capture?
+        else if(move.length() == 3 || (move.length() == 4 && move[1] == 'x')){
+            // if it's a capture, just get rid of the x
+            if(move[1] == 'x'){
+                move.erase(1, 1);
+            }
             // Has to be a real square
             if(move[1] < 'a' || move[1] > 'h' || move[2] < '1' || move[2] > '8'){
                 throw "Move illformed";
