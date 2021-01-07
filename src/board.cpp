@@ -549,6 +549,416 @@ struct Move Board::parseMove(std::string move){
         return parsedMove;
     }
 
+    // Bishop move
+    if(move[0] == 'B'){
+        // Get rid of captures sign
+        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // Get where the move is to
+        std::string loc_key = "";
+        if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 2];
+        }
+        if(move[move.size() - 1] < '1' || move[move.size() - 1] > '8'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 1];
+        }
+        // Deal with disambiguations
+        char disambiguated_file = '\0';
+        char disambiguated_rank = '\0';
+        if(move.size() == 4){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else if(move[1] >= '1' && move[1] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        else if(move.size() == 5){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+            if(move[2] >= '1' && move[2] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        // The square can't be occupied by your own piece
+        if(square_map[loc_key].piece != nullptr && square_map[loc_key].piece->owner == move_color){
+            throw "Move illformed";
+        }
+        // Find the correct Bishop
+        Square* current;
+        bool found = false;
+        // Check ne
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->e != nullptr){
+            current = current->n->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == B){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check nw
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->w != nullptr){
+            current = current->n->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == B){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check se
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->e != nullptr){
+            current = current->s->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == B){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check sw
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->w != nullptr){
+            current = current->s->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == B){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't have a piece blocking the square.
+            }
+        }
+        if(!found){
+            throw "Move illformed";
+        }
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = false;
+        parsedMove.to = &square_map[loc_key];
+        return parsedMove;
+    }
+
+    // Rook move
+    if(move[0] == 'R'){
+        // Get rid of captures sign
+        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // Get where the move is to
+        std::string loc_key = "";
+        if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 2];
+        }
+        if(move[move.size() - 1] < '1' || move[move.size() - 1] > '8'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 1];
+        }
+        // Deal with disambiguations
+        char disambiguated_file = '\0';
+        char disambiguated_rank = '\0';
+        if(move.size() == 4){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else if(move[1] >= '1' && move[1] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        else if(move.size() == 5){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+            if(move[2] >= '1' && move[2] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        // The square can't be occupied by your own piece
+        if(square_map[loc_key].piece != nullptr && square_map[loc_key].piece->owner == move_color){
+            throw "Move illformed";
+        }
+        // Find the correct Rook
+        Square* current;
+        bool found = false;
+        // Check north
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr){
+            current = current->n;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == R){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check south
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr){
+            current = current->s;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == R){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check west
+        current = &square_map[loc_key];
+        while(!found && current->w != nullptr){
+            current = current->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == R){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check east
+        current = &square_map[loc_key];
+        while(!found && current->e != nullptr){
+            current = current->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == R){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        if(!found){
+            throw "Move illformed";
+        }
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = false;
+        parsedMove.to = &square_map[loc_key];
+        return parsedMove;
+    }
+
+    // Knight move
+    if(move[0] == 'N'){
+        // Get rid of captures sign
+        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // Get where the move is to
+        std::string loc_key = "";
+        if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 2];
+        }
+        if(move[move.size() - 1] < '1' || move[move.size() - 1] > '8'){
+            throw "Move illformed";
+        }
+        else{
+            loc_key += move[move.size() - 1];
+        }
+        // Deal with disambiguations
+        char disambiguated_file = '\0';
+        char disambiguated_rank = '\0';
+        if(move.size() == 4){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else if(move[1] >= '1' && move[1] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        else if(move.size() == 5){
+            if(move[1] >= 'a' && move[1] <= 'h'){
+                disambiguated_file = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+            if(move[2] >= '1' && move[2] <= '8'){
+                disambiguated_rank = move[1];
+            }
+            else{
+                throw "Move illformed";
+            }
+        }
+        // The square can't be occupied by your own piece
+        if(square_map[loc_key].piece != nullptr && square_map[loc_key].piece->owner == move_color){
+            throw "Move illformed";
+        }
+        // Find the correct Knight
+        Square* current;
+        bool found = false;
+        // Check nne
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->n != nullptr && current->n->n->e != nullptr){
+            current = current->n->n->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check nnw
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->n != nullptr && current->n->n->w != nullptr){
+            current = current->n->n->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check nee
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->e != nullptr && current->n->e->e != nullptr){
+            current = current->n->e->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check nww
+        current = &square_map[loc_key];
+        while(!found && current->n != nullptr && current->n->w != nullptr && current->n->w->w != nullptr){
+            current = current->n->w->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check see
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->e != nullptr && current->s->e->e != nullptr){
+            current = current->s->e->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check sww
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->w != nullptr && current->s->w->w != nullptr){
+            current = current->s->w->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check sse
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->s != nullptr && current->s->s->e != nullptr){
+            current = current->s->s->e;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        // Check ssw
+        current = &square_map[loc_key];
+        while(!found && current->s != nullptr && current->s->s != nullptr && current->s->s->w != nullptr){
+            current = current->s->s->w;
+            if(current->piece != nullptr){
+                if(current->piece->owner == move_color && current->piece->type == N){
+                    if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
+                        parsedMove.piece = current->piece;
+                        found = true;
+                    }
+                }
+                break;  // Either way, can't hav ea piece blocking the square.
+            }
+        }
+        if(!found){
+            throw "Move illformed";
+        }
+        parsedMove.ks_castle = false;
+        parsedMove.qs_castle = false;
+        parsedMove.to = &square_map[loc_key];
+        return parsedMove;
+    }
+
     throw "Move illformed";
 }
 

@@ -246,6 +246,108 @@ void BoardTests::parseMoveTest(Board& brd){
     brd.removePiece(play_queen);
     std::cout << std::endl;
 
+    move = "Bc4";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
+    move = "Bc4";
+    brd.removePiece((*brd.getSquareMap())["e2"].piece);
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    add_back_pawn = new Piece();
+    add_back_pawn->owner = white;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["e2"];
+    brd.addPiece(add_back_pawn);
+    std::cout << std::endl;
+
+    move = "Ra5";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
+    move = "Ra5";
+    brd.removePiece((*brd.getSquareMap())["a2"].piece);
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    add_back_pawn = new Piece();
+    add_back_pawn->owner = white;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["a2"];
+    brd.addPiece(add_back_pawn);
+    std::cout << std::endl;
+
+    move = "Nc3";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
+    move = "Nc5";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
     std::cout << std::endl;
 }
 
@@ -364,10 +466,10 @@ void BoardTests::runTests(){
 
     Board myBoard;
 
-    squareLocTest(myBoard);
+    // squareLocTest(myBoard);
     parseMoveTest(myBoard);
-    pieceMapTest(myBoard);
-    deletePieceTest(myBoard);
+    // pieceMapTest(myBoard);
+    // deletePieceTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
