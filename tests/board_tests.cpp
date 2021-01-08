@@ -475,6 +475,51 @@ void BoardTests::deletePieceTest(Board& brd){
     std::cout << std::endl;
 }
 
+void BoardTests::inCheckTest(Board& brd){
+    std::cout << std::endl;
+
+    std::cout << "Expected: " << "Actual" << std::endl;
+    std::cout << "False: " << brd.inCheck(white) << std::endl;
+
+    Piece* add_knight = new Piece();
+    add_knight->owner = white;
+    add_knight->type = N;
+    add_knight->square = &(*brd.getSquareMap())["d6"];
+    brd.addPiece(add_knight);
+    std::cout << "True: " << brd.inCheck(black) << std::endl;
+    brd.removePiece(add_knight);
+
+    Piece* add_queen = new Piece();
+    add_queen->owner = white;
+    add_queen->type = Q;
+    add_queen->square = &(*brd.getSquareMap())["a4"];
+    brd.addPiece(add_queen);
+    brd.removePiece((*brd.getSquareMap())["d7"].piece);
+    std::cout << "True: " << brd.inCheck(black) << std::endl;
+    Piece* add_back_pawn = new Piece();
+    add_back_pawn->owner = black;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["d7"];
+    brd.addPiece(add_back_pawn);
+    brd.removePiece(add_queen);
+
+    add_queen = new Piece();
+    add_queen->owner = black;
+    add_queen->type = Q;
+    add_queen->square = &(*brd.getSquareMap())["a4"];
+    brd.addPiece(add_queen);
+    brd.removePiece((*brd.getSquareMap())["d7"].piece);
+    std::cout << "False: " << brd.inCheck(black) << std::endl;
+    add_back_pawn = new Piece();
+    add_back_pawn->owner = black;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["d7"];
+    brd.addPiece(add_back_pawn);
+    brd.removePiece(add_queen);
+
+    std::cout << std::endl;
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
     usleep(500000);
@@ -482,9 +527,10 @@ void BoardTests::runTests(){
     Board myBoard;
 
     // squareLocTest(myBoard);
-    parseMoveTest(myBoard);
+    // parseMoveTest(myBoard);
     // pieceMapTest(myBoard);
     // deletePieceTest(myBoard);
+    inCheckTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

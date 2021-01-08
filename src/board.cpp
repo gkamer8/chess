@@ -1090,7 +1090,7 @@ bool Board::inCheck(colors_t king_col){
         }
     }
     current = king->square;
-    while(current->w != nullptr && current->s->w != nullptr){
+    while(current->s != nullptr && current->s->w != nullptr){
         current = current->s->w;
         if(current->piece != nullptr){
             if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
