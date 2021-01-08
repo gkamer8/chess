@@ -947,7 +947,7 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
+                break;  // Either way, can't have a piece blocking the square.
             }
         }
         if(!found){
@@ -986,6 +986,194 @@ void Board::addPiece(Piece* pie){
     }
     // Add to the square
     pie->square->piece = pie;
+}
+
+// Determines if the king of a certain color is being attacked
+bool Board::inCheck(colors_t king_col){
+
+    Piece* king;
+    if(king_col == black){
+        king = black_piece_map[K].front();
+    }
+    else{
+        king = white_piece_map[K].front();
+    }
+
+    // Check for attacking pawns
+    Square* current = king->square;
+    if(king_col == white){
+        if(current->n != nullptr){
+            if(current->n->w != nullptr && current->n->w->piece != nullptr && current->n->w->piece->type==p && current->n->w->piece->owner == black){
+                return true;
+            }
+        }
+    }
+    else{
+        if(current->s != nullptr){
+            if(current->s->w != nullptr && current->s->w->piece != nullptr && current->s->w->piece->type==p && current->s->w->piece->owner == white){
+                return true;
+            }
+        }
+    }
+
+    // Check nsew for rooks or queens
+    // Check n
+    while(current->n != nullptr){
+        current = current->n;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->s != nullptr){
+        current = current->s;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->e != nullptr){
+        current = current->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->w != nullptr){
+        current = current->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+
+    // Check the diagonals for bishops or queens
+    current = king->square;
+    while(current->n != nullptr && current->n->e != nullptr){
+        current = current->n->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->n != nullptr && current->n->w != nullptr){
+        current = current->n->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->s != nullptr && current->s->e != nullptr){
+        current = current->s->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+    current = king->square;
+    while(current->w != nullptr && current->s->w != nullptr){
+        current = current->s->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+                return true;
+            }
+            break;
+        }
+    }
+
+    // Check the knight squares
+    current = king->square;
+    if(current->n != nullptr && current->n->n != nullptr && current->n->n->e != nullptr){
+        current = current->n->n->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->n != nullptr && current->n->n != nullptr && current->n->n->w != nullptr){
+        current = current->n->n->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->n != nullptr && current->n->w != nullptr && current->n->w->w != nullptr){
+        current = current->n->w->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->n != nullptr && current->n->e != nullptr && current->n->e->e != nullptr){
+        current = current->n->e->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->s != nullptr && current->s->e != nullptr && current->s->e->e != nullptr){
+        current = current->s->e->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->s != nullptr && current->s->w != nullptr && current->s->w->w != nullptr){
+        current = current->s->w->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->s != nullptr && current->s->s != nullptr && current->s->s->e != nullptr){
+        current = current->s->s->e;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    current = king->square;
+    if(current->s != nullptr && current->s->s != nullptr && current->s->s->w != nullptr){
+        current = current->s->s->w;
+        if(current->piece != nullptr){
+            if(current->piece->owner != king_col && current->piece->type == N){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){

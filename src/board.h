@@ -77,6 +77,7 @@ class Board{
         void setMoveColor(colors_t);
         void removePiece(Piece*);
         void addPiece(Piece*);
+        bool inCheck(colors_t);
 };
 
 #endif
