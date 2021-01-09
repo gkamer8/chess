@@ -81,6 +81,7 @@ class Board{
         bool inCheck(colors_t);
         void executeMove(Move&);
         bool isLegal(Move&);
+        bool inCheckmate();
 };
 
 #endif

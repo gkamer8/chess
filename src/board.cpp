@@ -234,12 +234,78 @@ void Board::makeMove(std::string move_str){
         throw "Illegal move";
     }
 
-    // After:
-    // See if it ends the game
     // Set castle eligibility appropriately
+        // If it was a king move, all castling is inelgible
+        // If it was a rook move or a rook was captured, castling on that side is ineligible
+    if(move_color == white){
+        if(move.piece->type == K){
+            white_ks_castle_eligible = false;
+            white_qs_castle_eligible = false;
+        }
+        else if(white_ks_castle_eligible){
+            if(move.piece->type == R && move.piece->square->name == "h1"){
+                white_ks_castle_eligible = false;
+            }
+        }
+        else if(white_qs_castle_eligible){
+            if(move.piece->type == R && move.piece->square->name == "a1"){
+                white_qs_castle_eligible = false;
+            }
+        }
+        else if(black_ks_castle_eligible){
+            if(move.to->name == "h8"){
+                black_ks_castle_eligible = false;
+            }
+        }
+        else if(black_qs_castle_eligible){
+            if(move.to->name == "a8"){
+                black_qs_castle_eligible = false;
+            }
+        }
+    }
+    else{
+        if(move.piece->type == K){
+            black_ks_castle_eligible = false;
+            black_qs_castle_eligible = false;
+        }
+        else if(black_ks_castle_eligible){
+            if(move.piece->type == R && move.piece->square->name == "h8"){
+                black_ks_castle_eligible = false;
+            }
+        }
+        else if(black_qs_castle_eligible){
+            if(move.piece->type == R && move.piece->square->name == "a8"){
+                black_qs_castle_eligible = false;
+            }
+        }
+        else if(white_ks_castle_eligible){
+            if(move.to->name == "h1"){
+                white_ks_castle_eligible = false;
+            }
+        }
+        else if(white_qs_castle_eligible){
+            if(move.to->name == "a1"){
+                white_qs_castle_eligible = false;
+            }
+        }
+    }
     // Increment move number
+    move_num++;
     // Set move color
+    if(move_color == white){
+        move_color = black;
+    }
+    else{
+        move_color = white;
+    }
     // Add to moves vector
+    moves.push_back(move_str);
+
+    // Execute the move
+    executeMove(move);
+
+    // Is the board in checkmate?
+    // TODO
 }
 
 // Checks whether castling is legal and possible, makes sure the move doesn't put the mover in check
@@ -1386,6 +1452,12 @@ bool Board::inCheck(colors_t king_col){
             }
         }
     }
+    return false;
+}
+
+// TODO: Determines if the player with the current move is in checkmate
+bool Board::inCheckmate(){
+    // TODO
     return false;
 }
 
