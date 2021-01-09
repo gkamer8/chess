@@ -598,8 +598,21 @@ void BoardTests::moveTest(Board& brd){
     brd.makeMove("Bb5");
     brd.makeMove("Nf6");
     brd.makeMove("O-O");
-    std::cout << "Main line in the Berlin ending with 0-0:" << std::endl;
+    std::cout << "Main line in the Berlin with 4. 0-0:" << std::endl;
     brd.display();
+    std::cout << std::endl;
+
+    brd.makeMove("d6");
+    brd.makeMove("Re1");
+    try{
+        brd.makeMove("Nd4");
+        std::cout << "Illegal move handled incorrectly." << std::endl;
+    }
+    catch(const char* er){
+        std::cout << "Illegal move handled correctly." << std::endl;
+    }
+    brd.display();
+
     std::cout << std::endl;
 }
 

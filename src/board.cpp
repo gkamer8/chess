@@ -440,7 +440,13 @@ bool Board::isLegal(Move& move){
     }
     // Execute the move on a fake board – can't put the mover in check
     Board checkCheck(*this);
-    checkCheck.executeMove(move);
+    Move checkMove;
+    checkMove.ks_castle = move.ks_castle;
+    checkMove.qs_castle = move.qs_castle;
+    checkMove.piece = (*checkCheck.getSquareMap())[move.piece->square->name].piece;
+    checkMove.promotedTo = move.promotedTo;
+    checkMove.to = &(*checkCheck.getSquareMap())[move.to->name];
+    checkCheck.executeMove(checkMove);
     if(checkCheck.inCheck(move_color)){
         return false;
     }
