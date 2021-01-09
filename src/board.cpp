@@ -242,9 +242,14 @@ void Board::makeMove(std::string move_str){
     // Add to moves vector
 }
 
+// Checks whether castling is legal and possible, makes sure the move doesn't put the mover in check
 bool Board::isLegal(Move& move){
     // First take care of the castling situation
     if(move.ks_castle){
+        // Can't castle out of check
+        if(inCheck(move_color)){
+            return false;
+        }
         if(move_color == white){
             if(!white_ks_castle_eligible){
                 return false;
@@ -287,6 +292,10 @@ bool Board::isLegal(Move& move){
         }
     }
     else if(move.qs_castle){
+        // Can't castle out of check
+        if(inCheck(move_color)){
+            return false;
+        }
         if(move_color == white){
             if(!white_qs_castle_eligible){
                 return false;

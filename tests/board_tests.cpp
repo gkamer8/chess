@@ -590,10 +590,10 @@ void BoardTests::runTests(){
     Board myBoard;
 
     // squareLocTest(myBoard);
-    parseMoveTest(myBoard);
+    // parseMoveTest(myBoard);
     // pieceMapTest(myBoard);
     // deletePieceTest(myBoard);
-    inCheckTest(myBoard);
+    // inCheckTest(myBoard);
     // copyTest(myBoard);
     isLegalTest(myBoard);
 
