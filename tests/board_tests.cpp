@@ -598,7 +598,7 @@ void BoardTests::moveTest(Board& brd){
     brd.makeMove("Bb5");
     brd.makeMove("Nf6");
     brd.makeMove("O-O");
-    std::cout << std::endl;
+    std::cout << "Main line in the Berlin ending with 0-0:" << std::endl;
     brd.display();
     std::cout << std::endl;
 }
