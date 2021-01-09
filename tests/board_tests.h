@@ -11,6 +11,7 @@ class BoardTests : public Test{
         void pieceMapTest(Board&);
         void deletePieceTest(Board&);
         void inCheckTest(Board&);
+        void copyTest(Board&);
     public:
         void runTests();
 };

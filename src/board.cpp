@@ -7,7 +7,6 @@
 Board::Board(){
     move_color = white;
     move_num = 1;
-    check = false;
     white_ks_castle_eligible = true;
     black_ks_castle_eligible = true;
     white_qs_castle_eligible = true;
@@ -139,16 +138,195 @@ Board::Board(){
     }
 }
 
-void Board::makeMove(){
-
+// Copy constructor
+Board::Board(Board& brd){
+    move_color = brd.move_color;
+    move_num = brd.move_num;
+    white_ks_castle_eligible = brd.white_ks_castle_eligible;
+    black_ks_castle_eligible = brd.black_ks_castle_eligible;
+    white_qs_castle_eligible = brd.white_qs_castle_eligible;
+    black_qs_castle_eligible = brd.black_qs_castle_eligible;
+    square_map = *(brd.getSquareMap());
+    black_piece_map = *(brd.getBlackPieceMap());
+    white_piece_map = *(brd.getWhitePieceMap());
+    moves = brd.moves;
 }
 
-bool Board::isLegal(std::string move){
-    return true;  // placeholder
+// Note: might throw an error if asked to castle and it can't
+void Board::executeMove(Move& move){
+
+    move.piece->square->piece = nullptr;
+    move.piece->square = move.to;
+    move.to->piece = move.piece;
+
+    // Move the rook if it's a castle
+    if(move.ks_castle){
+        if(move_color == white){
+            square_map["f1"].piece = square_map["h1"].piece;
+            square_map["h1"].piece = nullptr;
+            square_map["f1"].piece->square = &square_map["f1"];
+        }
+        else{
+            square_map["f8"].piece = square_map["h8"].piece;
+            square_map["h8"].piece = nullptr;
+            square_map["f8"].piece->square = &square_map["f8"];
+        }
+        return;
+    }
+    else if(move.qs_castle){
+        if(move_color == white){
+            square_map["c1"].piece = square_map["a1"].piece;
+            square_map["a1"].piece = nullptr;
+            square_map["c1"].piece->square = &square_map["c1"];
+        }
+        else{
+            square_map["c8"].piece = square_map["a8"].piece;
+            square_map["a8"].piece = nullptr;
+            square_map["c8"].piece->square = &square_map["c8"];
+        }
+        return;
+    }
+
+    if(move.promotedTo != p){
+        move.piece->type = move.promotedTo;
+    }
+}
+
+void Board::makeMove(std::string move_str){
+    Move move = parseMove(move_str);  // This could throw a "Move illformed"
+
+    // If illegal, end
+    if(!isLegal(move)){
+        throw "Illegal move";
+    }
+
+    // After:
+    // See if it ends the game
+    // Set castle eligibility appropriately
+    // Increment move number
+    // Set move color
+    // Add to moves vector
+}
+
+bool Board::isLegal(Move& move){
+    // First take care of the castling situation
+    if(move.ks_castle){
+        if(move_color == white){
+            if(!white_ks_castle_eligible){
+                return false;
+            }
+            // There must be open space
+            if(square_map["g1"].piece != nullptr){
+                return false;
+            }
+            if(square_map["f1"].piece != nullptr){
+                return false;
+            }
+            // Can't castle through check
+            // Create copy board, move the king to f1, and see if it's in check
+            Board checkCheck(*this);
+            Move kingMove;
+            kingMove.qs_castle = false;
+            kingMove.ks_castle;
+            kingMove.piece = white_piece_map[K].front();
+            kingMove.to = &square_map["f1"];
+            kingMove.promotedTo = p;
+            checkCheck.executeMove(kingMove);
+            if(checkCheck.inCheck(move_color)){
+                return false;
+            }
+        }
+        else{
+            if(!black_ks_castle_eligible){
+                return false;
+            }
+            // There must be open space
+            if(square_map["g8"].piece != nullptr){
+                return false;
+            }
+            if(square_map["f8"].piece != nullptr){
+                return false;
+            }
+            // Can't castle through check
+            // Create copy board, move the king to f1, and see if it's in check
+            Board checkCheck(*this);
+            Move kingMove;
+            kingMove.qs_castle = false;
+            kingMove.ks_castle;
+            kingMove.piece = white_piece_map[K].front();
+            kingMove.to = &square_map["f8"];
+            kingMove.promotedTo = p;
+            checkCheck.executeMove(kingMove);
+            if(checkCheck.inCheck(move_color)){
+                return false;
+            }
+        }
+    }
+    else if(move.qs_castle){
+        if(move_color == white){
+            if(!white_qs_castle_eligible){
+                return false;
+            }
+            // There must be open space
+            if(square_map["c1"].piece != nullptr){
+                return false;
+            }
+            if(square_map["d1"].piece != nullptr){
+                return false;
+            }
+            // Can't castle through check
+            // Create copy board, move the king to f1, and see if it's in check
+            Board checkCheck(*this);
+            Move kingMove;
+            kingMove.qs_castle = false;
+            kingMove.ks_castle;
+            kingMove.piece = white_piece_map[K].front();
+            kingMove.to = &square_map["d1"];
+            kingMove.promotedTo = p;
+            checkCheck.executeMove(kingMove);
+            if(checkCheck.inCheck(move_color)){
+                return false;
+            }
+        }
+        else{
+            if(!black_qs_castle_eligible){
+                return false;
+            }
+            // There must be open space
+            if(square_map["c8"].piece != nullptr){
+                return false;
+            }
+            if(square_map["d8"].piece != nullptr){
+                return false;
+            }
+            // Can't castle through check
+            // Create copy board, move the king to f1, and see if it's in check
+            Board checkCheck(*this);
+            Move kingMove;
+            kingMove.qs_castle = false;
+            kingMove.ks_castle;
+            kingMove.piece = white_piece_map[K].front();
+            kingMove.to = &square_map["d8"];
+            kingMove.promotedTo = p;
+            checkCheck.executeMove(kingMove);
+            if(checkCheck.inCheck(move_color)){
+                return false;
+            }
+        }
+    }
+    // Execute the move on a fake board – can't put the mover in check
+    Board checkCheck(*this);
+    checkCheck.executeMove(move);
+    if(checkCheck.inCheck(move_color)){
+        return false;
+    }
+
+    return true;
 }
 
 struct Move Board::parseMove(std::string move){
     Move parsedMove;
+    parsedMove.promotedTo = p;  // Like setting it to null – can never be promoted to pawn
 
     // TODO: Custom exceptions
 

@@ -2,6 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <list>
+#include <vector>
 
 #ifndef board
 #define board
@@ -57,8 +58,8 @@ class Board{
         bool black_ks_castle_eligible;
         bool white_qs_castle_eligible;
         bool black_qs_castle_eligible;
-        bool check;
-
+        std::vector<std::string> moves;
+ 
         // The board's main datatype (this is "the board" in a conventional sense)
         std::unordered_map<std::string, Square, CustomHash> square_map;
 
@@ -68,8 +69,8 @@ class Board{
 
     public:
         Board();
-        void makeMove();
-        bool isLegal(std::string);
+        Board(Board&);
+        void makeMove(std::string);
         Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash>* getSquareMap();
         std::unordered_map< piece_t, std::list<Piece*>, std::hash<int> >* getBlackPieceMap();
@@ -78,6 +79,8 @@ class Board{
         void removePiece(Piece*);
         void addPiece(Piece*);
         bool inCheck(colors_t);
+        void executeMove(Move&);
+        bool isLegal(Move&);
 };
 
 #endif

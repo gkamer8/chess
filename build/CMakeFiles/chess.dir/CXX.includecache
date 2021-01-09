@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.cpp
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+iostream
+-
+unordered_map
+-
+
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
@@ -15,8 +27,36 @@ unordered_map
 -
 list
 -
+vector
+-
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp
+iostream
+-
+stdlib.h
+-
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+cpu.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+../tests/main_tests.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp
+cpu.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.cpp
 ../src/board.h
@@ -33,6 +73,16 @@ main_tests.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 ../src/board.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.cpp
+main_tests.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
+board_tests.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.h
+unistd.h
+-
+iostream
+-
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 

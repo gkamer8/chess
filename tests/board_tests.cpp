@@ -363,6 +363,21 @@ void BoardTests::parseMoveTest(Board& brd){
     }
     std::cout << std::endl;
 
+    move = "e4Q";
+    try{
+        Move mv = brd.parseMove(move);
+        std::cout << "Move: " << move << std::endl;
+        std::cout << "From: " << mv.piece->square->name << std::endl;
+        std::cout << "To: " << mv.to->name << std::endl;
+        std::cout << "Piece: " << piece_to_string(mv.piece->type) << std::endl;
+        std::cout << "Ks-c: " << mv.ks_castle << std::endl;
+        std::cout << "Qs-c: " << mv.qs_castle << std::endl;
+    }
+    catch(const char* exp){
+        std::cout << move << ": " << exp << std::endl;
+    }
+    std::cout << std::endl;
+
     std::cout << std::endl;
 }
 
@@ -520,6 +535,17 @@ void BoardTests::inCheckTest(Board& brd){
     std::cout << std::endl;
 }
 
+void BoardTests::copyTest(Board& brd){
+    std::cout << std::endl;
+
+    brd.removePiece((*(brd.getSquareMap()))["d2"].piece);
+    bool truth = (*brd.getSquareMap())["d2"].piece == nullptr;
+
+    std::cout << "Should be 1: " << truth << std::endl;
+
+    std::cout << std::endl;
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
     usleep(500000);
@@ -530,7 +556,8 @@ void BoardTests::runTests(){
     // parseMoveTest(myBoard);
     // pieceMapTest(myBoard);
     // deletePieceTest(myBoard);
-    inCheckTest(myBoard);
+    // inCheckTest(myBoard);
+    copyTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
