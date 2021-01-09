@@ -583,6 +583,10 @@ void BoardTests::isLegalTest(Board& brd){
     std::cout << std::endl;
 }
 
+void BoardTests::displayTest(Board& brd){
+    brd.display();
+}
+
 void BoardTests::runTests(){
     std::cout << "Running Board tests..." << std::endl;
     usleep(500000);
@@ -595,7 +599,8 @@ void BoardTests::runTests(){
     // deletePieceTest(myBoard);
     // inCheckTest(myBoard);
     // copyTest(myBoard);
-    isLegalTest(myBoard);
+    // isLegalTest(myBoard);
+    displayTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

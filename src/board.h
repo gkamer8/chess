@@ -82,6 +82,7 @@ class Board{
         void executeMove(Move&);
         bool isLegal(Move&);
         bool inCheckmate();
+        void display();
 };
 
 #endif

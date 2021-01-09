@@ -6,6 +6,25 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 
+std::string pieceToShortString(piece_t t){
+    if(t == K){
+        return "K";
+    }
+    else if(t == N){
+        return "N";
+    }
+    else if(t == B){
+        return "B";
+    }
+    else if(t == Q){
+        return "Q";
+    }
+    else if(t == R){
+        return "R";
+    }
+    return "P";
+}
+
 Board::Board(){
     move_color = white;
     move_num = 1;
@@ -1459,6 +1478,37 @@ bool Board::inCheck(colors_t king_col){
 bool Board::inCheckmate(){
     // TODO
     return false;
+}
+
+void Board::display(){
+    const std::string red("\x1b[31m");
+    const std::string green("\x1b[32m");
+    const std::string cyan("\x1b[100m");
+    const std::string magenta("\x1b[47m");
+    const std::string reset("\x1b[0m");
+
+    std::string sq_color = cyan;
+    for(int i = 8; i >= 1; i--){
+        for(char c = 'a'; c <= 'h'; c++){
+            sq_color = sq_color == cyan ? magenta : cyan;
+            std::string myStr = " ";
+            std::string key = "";
+            std::string col = "";
+            key += c;
+            key += std::to_string(i);
+            if(square_map[key].piece == nullptr){
+                myStr += " ";
+            }
+            else{
+                myStr += pieceToShortString(square_map[key].piece->type);
+                col = square_map[key].piece->owner == white ? green : red;
+            }   
+            myStr += " ";
+            std::cout << sq_color << col << myStr << reset;
+        }
+        std::cout << std::endl;
+        sq_color = sq_color == cyan ? magenta : cyan;
+    }
 }
 
 std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){
