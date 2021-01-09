@@ -208,36 +208,53 @@ Board::Board(Board& brd){
 // Note: might throw an error if asked to castle and it can't
 void Board::executeMove(Move& move){
 
-    move.piece->square->piece = nullptr;
-    move.piece->square = move.to;
-    move.to->piece = move.piece;
-
-    // Move the rook if it's a castle
+    // Address castling
     if(move.ks_castle){
         if(move_color == white){
             square_map["f1"].piece = square_map["h1"].piece;
             square_map["h1"].piece = nullptr;
+            square_map["g1"].piece = square_map["e1"].piece;
+            square_map["e1"].piece = nullptr;
+
+            square_map["g1"].piece->square = &square_map["g1"];
             square_map["f1"].piece->square = &square_map["f1"];
         }
         else{
             square_map["f8"].piece = square_map["h8"].piece;
             square_map["h8"].piece = nullptr;
+            square_map["g8"].piece = square_map["e8"].piece;
+            square_map["e8"].piece = nullptr;
+
+            square_map["g8"].piece->square = &square_map["g8"];
             square_map["f8"].piece->square = &square_map["f8"];
         }
         return;
     }
     else if(move.qs_castle){
         if(move_color == white){
-            square_map["c1"].piece = square_map["a1"].piece;
+            square_map["d1"].piece = square_map["a1"].piece;
             square_map["a1"].piece = nullptr;
+            square_map["c1"].piece = square_map["e1"].piece;
+            square_map["e1"].piece = nullptr;
+
             square_map["c1"].piece->square = &square_map["c1"];
+            square_map["d1"].piece->square = &square_map["d1"];
         }
         else{
-            square_map["c8"].piece = square_map["a8"].piece;
+            square_map["d8"].piece = square_map["a8"].piece;
             square_map["a8"].piece = nullptr;
+            square_map["c8"].piece = square_map["e8"].piece;
+            square_map["e8"].piece = nullptr;
+
             square_map["c8"].piece->square = &square_map["c8"];
+            square_map["d8"].piece->square = &square_map["d8"];
         }
         return;
+    }
+    else{
+        move.piece->square->piece = nullptr;
+        move.piece->square = move.to;
+        move.to->piece = move.piece;
     }
 
     if(move.promotedTo != p){
@@ -308,6 +325,8 @@ void Board::makeMove(std::string move_str){
             }
         }
     }
+    // Execute the move
+    executeMove(move);
     // Increment move number
     move_num++;
     // Set move color
@@ -319,9 +338,6 @@ void Board::makeMove(std::string move_str){
     }
     // Add to moves vector
     moves.push_back(move_str);
-
-    // Execute the move
-    executeMove(move);
 
     // Is the board in checkmate?
     // TODO

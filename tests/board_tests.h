@@ -14,6 +14,7 @@ class BoardTests : public Test{
         void copyTest(Board&);
         void isLegalTest(Board&);
         void displayTest(Board&);
+        void moveTest(Board&);
     public:
         void runTests();
 };

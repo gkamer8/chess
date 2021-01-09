@@ -584,7 +584,23 @@ void BoardTests::isLegalTest(Board& brd){
 }
 
 void BoardTests::displayTest(Board& brd){
+    std::cout << std::endl;
     brd.display();
+    std::cout << std::endl;
+}
+
+void BoardTests::moveTest(Board& brd){
+    std::cout << std::endl;
+    brd.makeMove("e4");
+    brd.makeMove("e5");
+    brd.makeMove("Nf3");
+    brd.makeMove("Nc6");
+    brd.makeMove("Bb5");
+    brd.makeMove("Nf6");
+    brd.makeMove("O-O");
+    std::cout << std::endl;
+    brd.display();
+    std::cout << std::endl;
 }
 
 void BoardTests::runTests(){
@@ -600,7 +616,8 @@ void BoardTests::runTests(){
     // inCheckTest(myBoard);
     // copyTest(myBoard);
     // isLegalTest(myBoard);
-    displayTest(myBoard);
+    // displayTest(myBoard);
+    moveTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }
