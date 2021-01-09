@@ -543,6 +543,43 @@ void BoardTests::copyTest(Board& brd){
 
     std::cout << "Should be 1: " << truth << std::endl;
 
+    Board brd2(brd);
+    truth = (*brd2.getSquareMap())["d2"].piece == nullptr;
+    std::cout << "Should be 1: " << truth << std::endl;
+
+    brd2.removePiece((*(brd2.getSquareMap()))["e2"].piece);
+    truth = (*brd.getSquareMap())["e2"].piece == nullptr;
+    std::cout << "Should be 0: " << truth << std::endl;
+
+    Piece* add_back_pawn = new Piece();
+    add_back_pawn->owner = white;
+    add_back_pawn->type = p;
+    add_back_pawn->square = &(*brd.getSquareMap())["d2"];
+    brd.addPiece(add_back_pawn);
+
+    std::cout << std::endl;
+}
+
+void BoardTests::isLegalTest(Board& brd){
+    std::cout << std::endl;
+
+    std::cout << "Expected: " << "Actual" << std::endl;
+
+    Move mv = brd.parseMove("0-0");
+    std::cout << "False: " << brd.isLegal(mv) << std::endl;
+
+    Board test(brd);
+    test.removePiece((*test.getSquareMap())["d2"].piece);
+    test.removePiece((*test.getSquareMap())["d7"].piece);
+    mv = test.parseMove("Kd2");
+    std::cout << "False: " << test.isLegal(mv) << std::endl;
+    
+    Board test2(brd);
+    test2.removePiece((*test2.getSquareMap())["d2"].piece);
+    test2.removePiece((*test2.getSquareMap())["d7"].piece);
+    mv = test2.parseMove("Nf3");
+    std::cout << "True: " << test2.isLegal(mv) << std::endl;
+
     std::cout << std::endl;
 }
 
@@ -553,11 +590,12 @@ void BoardTests::runTests(){
     Board myBoard;
 
     // squareLocTest(myBoard);
-    // parseMoveTest(myBoard);
+    parseMoveTest(myBoard);
     // pieceMapTest(myBoard);
     // deletePieceTest(myBoard);
-    // inCheckTest(myBoard);
-    copyTest(myBoard);
+    inCheckTest(myBoard);
+    // copyTest(myBoard);
+    isLegalTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

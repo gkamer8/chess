@@ -12,6 +12,7 @@ class BoardTests : public Test{
         void deletePieceTest(Board&);
         void inCheckTest(Board&);
         void copyTest(Board&);
+        void isLegalTest(Board&);
     public:
         void runTests();
 };

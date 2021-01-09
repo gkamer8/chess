@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <unordered_map>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc++11-extensions"
 
 Board::Board(){
     move_color = white;
@@ -138,7 +140,7 @@ Board::Board(){
     }
 }
 
-// Copy constructor
+// Copy constructor - deep copy
 Board::Board(Board& brd){
     move_color = brd.move_color;
     move_num = brd.move_num;
@@ -146,10 +148,42 @@ Board::Board(Board& brd){
     black_ks_castle_eligible = brd.black_ks_castle_eligible;
     white_qs_castle_eligible = brd.white_qs_castle_eligible;
     black_qs_castle_eligible = brd.black_qs_castle_eligible;
-    square_map = *(brd.getSquareMap());
-    black_piece_map = *(brd.getBlackPieceMap());
-    white_piece_map = *(brd.getWhitePieceMap());
-    moves = brd.moves;
+    for (std::pair<std::string, Square> element : brd.square_map){
+        Square* new_square = new Square();
+        square_map[element.first] = *new_square;
+    }
+    for (std::pair<std::string, Square> element : brd.square_map){
+        square_map[element.first].clr = element.second.clr;
+        square_map[element.first].file = element.second.file;
+        square_map[element.first].rank = element.second.rank;
+        square_map[element.first].name = element.second.name;
+
+
+        square_map[element.first].n = element.second.n == nullptr ? nullptr : &square_map[element.second.n->name];
+        square_map[element.first].s = element.second.s == nullptr ? nullptr : &square_map[element.second.s->name];
+        square_map[element.first].e = element.second.e == nullptr ? nullptr : &square_map[element.second.e->name];
+        square_map[element.first].w = element.second.w == nullptr ? nullptr : &square_map[element.second.w->name];
+        square_map[element.first].ne = element.second.ne == nullptr ? nullptr : &square_map[element.second.ne->name];
+        square_map[element.first].nw = element.second.nw == nullptr ? nullptr : &square_map[element.second.nw->name];
+        square_map[element.first].se = element.second.se == nullptr ? nullptr : &square_map[element.second.se->name];
+        square_map[element.first].sw = element.second.sw == nullptr ? nullptr : &square_map[element.second.sw->name];
+
+        square_map[element.first].piece = nullptr;
+        if(element.second.piece != nullptr){
+            Piece* new_piece = new Piece();
+            new_piece->owner = element.second.piece->owner;
+            new_piece->square = &square_map[element.first];
+            new_piece->type = element.second.piece->type;
+            square_map[element.first].piece = new_piece;
+            if(new_piece->owner == white){
+                white_piece_map[new_piece->type].push_front(new_piece);
+            }
+            else{
+                black_piece_map[new_piece->type].push_front(new_piece);
+            }
+        }
+    }
+    moves = brd.moves;  // Should automatically clone
 }
 
 // Note: might throw an error if asked to castle and it can't
@@ -225,12 +259,7 @@ bool Board::isLegal(Move& move){
             // Can't castle through check
             // Create copy board, move the king to f1, and see if it's in check
             Board checkCheck(*this);
-            Move kingMove;
-            kingMove.qs_castle = false;
-            kingMove.ks_castle;
-            kingMove.piece = white_piece_map[K].front();
-            kingMove.to = &square_map["f1"];
-            kingMove.promotedTo = p;
+            Move kingMove = checkCheck.parseMove("Kf1");
             checkCheck.executeMove(kingMove);
             if(checkCheck.inCheck(move_color)){
                 return false;
@@ -250,12 +279,7 @@ bool Board::isLegal(Move& move){
             // Can't castle through check
             // Create copy board, move the king to f1, and see if it's in check
             Board checkCheck(*this);
-            Move kingMove;
-            kingMove.qs_castle = false;
-            kingMove.ks_castle;
-            kingMove.piece = white_piece_map[K].front();
-            kingMove.to = &square_map["f8"];
-            kingMove.promotedTo = p;
+            Move kingMove = checkCheck.parseMove("Kf8");
             checkCheck.executeMove(kingMove);
             if(checkCheck.inCheck(move_color)){
                 return false;
@@ -277,12 +301,7 @@ bool Board::isLegal(Move& move){
             // Can't castle through check
             // Create copy board, move the king to f1, and see if it's in check
             Board checkCheck(*this);
-            Move kingMove;
-            kingMove.qs_castle = false;
-            kingMove.ks_castle;
-            kingMove.piece = white_piece_map[K].front();
-            kingMove.to = &square_map["d1"];
-            kingMove.promotedTo = p;
+            Move kingMove = checkCheck.parseMove("Kd1");
             checkCheck.executeMove(kingMove);
             if(checkCheck.inCheck(move_color)){
                 return false;
@@ -302,12 +321,7 @@ bool Board::isLegal(Move& move){
             // Can't castle through check
             // Create copy board, move the king to f1, and see if it's in check
             Board checkCheck(*this);
-            Move kingMove;
-            kingMove.qs_castle = false;
-            kingMove.ks_castle;
-            kingMove.piece = white_piece_map[K].front();
-            kingMove.to = &square_map["d8"];
-            kingMove.promotedTo = p;
+            Move kingMove = checkCheck.parseMove("Kd8");
             checkCheck.executeMove(kingMove);
             if(checkCheck.inCheck(move_color)){
                 return false;
@@ -544,6 +558,18 @@ struct Move Board::parseMove(std::string move){
         else if(square_map[key].e != nullptr && square_map[key].e->piece != nullptr && square_map[key].e->piece->type == K && square_map[key].e->piece->owner == move_color){
             parsedMove.piece = square_map[key].e->piece;
         }
+        else if(square_map[key].ne != nullptr && square_map[key].ne->piece != nullptr && square_map[key].ne->piece->type == K && square_map[key].ne->piece->owner == move_color){
+            parsedMove.piece = square_map[key].ne->piece;
+        }
+        else if(square_map[key].nw != nullptr && square_map[key].nw->piece != nullptr && square_map[key].nw->piece->type == K && square_map[key].nw->piece->owner == move_color){
+            parsedMove.piece = square_map[key].nw->piece;
+        }
+        else if(square_map[key].se != nullptr && square_map[key].se->piece != nullptr && square_map[key].se->piece->type == K && square_map[key].se->piece->owner == move_color){
+            parsedMove.piece = square_map[key].se->piece;
+        }
+        else if(square_map[key].sw != nullptr && square_map[key].sw->piece != nullptr && square_map[key].sw->piece->type == K && square_map[key].sw->piece->owner == move_color){
+            parsedMove.piece = square_map[key].sw->piece;
+        }
         else{
             throw "Move illformed";
         }
@@ -664,8 +690,8 @@ struct Move Board::parseMove(std::string move){
         }
         // Check ne
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->e != nullptr){
-            current = current->n->e;
+        while(!found && current->ne != nullptr){
+            current = current->ne;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == Q){
                     if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
@@ -678,8 +704,8 @@ struct Move Board::parseMove(std::string move){
         }
         // Check nw
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->w != nullptr){
-            current = current->n->w;
+        while(!found && current->nw != nullptr){
+            current = current->nw;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == Q){
                     if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
@@ -692,8 +718,8 @@ struct Move Board::parseMove(std::string move){
         }
         // Check se
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->e != nullptr){
-            current = current->s->e;
+        while(!found && current->se != nullptr){
+            current = current->se;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == Q){
                     if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
@@ -706,8 +732,8 @@ struct Move Board::parseMove(std::string move){
         }
         // Check sw
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->w != nullptr){
-            current = current->s->w;
+        while(!found && current->sw != nullptr){
+            current = current->sw;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == Q){
                     if((disambiguated_file == current->name[0] || disambiguated_file == '\0') && (disambiguated_rank == current->name[1] || disambiguated_rank == '\0')){
