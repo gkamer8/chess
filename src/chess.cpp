@@ -12,7 +12,7 @@ colors_t prompt_color();
 bool cpu_turn = false;
 
 // If true, only tests are run before program closes.
-bool test_run = true;
+bool test_run = false;
 
 int main(){
 
@@ -28,8 +28,7 @@ int main(){
     // Choose color
     cpu_color = prompt_color();
 
-    // "cpu.cpp" is the file, "Cpu" is the class/constructor, and "comp" is the instance
-    Cpu comp(cpu_color, brd);
+    Cpu comp(cpu_color, &brd);
 
     if(cpu_color == white){
         cout << "I am white." << endl;
@@ -39,7 +38,32 @@ int main(){
         cout << "I am black." << endl;
     }
 
+    // User game loop
+    while(true){
+        if(brd.getMoveColor() == white){
+            cout << std::to_string(brd.getMoveNum()) << ": ";
+        }
+        else{  
+            cout << std::to_string(brd.getMoveNum()) << ": ... ";
+        }
+        // Wait for user input
+        std::string user_move;
+        cin >> user_move;
+        if(user_move == "show"){
+            brd.display();
+        }
+        else{
+            try{
+                brd.makeMove(user_move);
+            }
+            catch(const char* e){
+                cout << e << std::endl;
+            }
+        }
+    }
+
     // Main game loop
+    exit(0);
     while(true){
         if(cpu_turn){
             cout << comp.getMove() << endl;
@@ -47,7 +71,14 @@ int main(){
         }
         else{
             // Wait for user input
-            break;
+            std::string user_move;
+            cin >> user_move;
+            try{
+                brd.makeMove(user_move);
+            }
+            catch(const char* e){
+                cout << e;
+            }
         }
     }
 }

@@ -85,6 +85,8 @@ class Board{
         bool isLegal(Move&);
         bool inCheckmate();
         void display();
+        colors_t getMoveColor();
+        int getMoveNum();
 };
 
 #endif

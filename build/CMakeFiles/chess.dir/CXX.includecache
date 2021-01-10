@@ -30,5 +30,29 @@ list
 vector
 -
 
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.cpp
+iostream
+-
+stdlib.h
+-
+chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+cpu.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+../tests/main_tests.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+
+/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 

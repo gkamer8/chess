@@ -6,6 +6,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 
+// For display()
 std::string pieceToShortString(piece_t t){
     switch(t){
         case K:
@@ -347,14 +348,13 @@ void Board::makeMove(std::string move_str){
     }
     // Execute the move
     executeMove(move);
-    // Increment move number
-    move_num++;
     // Set move color
     if(move_color == white){
         move_color = black;
     }
     else{
         move_color = white;
+        move_num++;
     }
     // Add to moves vector
     moves.push_back(move_str);
@@ -618,13 +618,16 @@ struct Move Board::parseMove(std::string move){
                             throw "Move illformed";
                         }
                     }
-                    if(move_color == black && current_square->rank == 6-1){
+                    else if(move_color == black && current_square->rank == 6-1){
                         if(current_square->n->piece != nullptr && current_square->n->piece->type == p && current_square->n->piece->owner == black){
                             parsedMove.piece = current_square->n->piece;
                         }
                         else{
                             throw "Move illformed";
                         }
+                    }
+                    else{
+                        throw "Move illformed";
                     }
                 }
                 else{
@@ -1578,6 +1581,14 @@ void Board::display(){
         std::cout << std::endl;
         sq_color = sq_color == cyan ? magenta : cyan;
     }
+}
+
+colors_t Board::getMoveColor(){
+    return move_color;
+}
+
+int Board::getMoveNum(){
+    return move_num;
 }
 
 std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){
