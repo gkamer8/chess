@@ -41,6 +41,7 @@ struct Move{
     Piece* piece;  // piece being moved (includes current square)
     Square* to;  // where the piece is moving to
     piece_t promotedTo;
+    std::string enPassant;  // Coordinates of the piece being taken en passant
 };
 
 // For optimization - keys are simply algebraic coordinates; no need for complication
@@ -58,6 +59,7 @@ class Board{
         bool black_ks_castle_eligible;
         bool white_qs_castle_eligible;
         bool black_qs_castle_eligible;
+        std::string enPassantLoc;
         std::vector<std::string> moves;
  
         // The board's main datatype (this is "the board" in a conventional sense)

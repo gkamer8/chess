@@ -611,7 +611,24 @@ void BoardTests::moveTest(Board& brd){
     catch(const char* er){
         std::cout << "Illegal move handled correctly." << std::endl;
     }
-    brd.display();
+    std::cout << std::endl;
+
+    // Testing en passant
+    Board brd2;
+    brd2.makeMove("e4");
+    brd2.makeMove("d5");
+    brd2.makeMove("exd5");
+    brd2.makeMove("c5");
+    brd2.makeMove("dxc6");
+    brd2.display();
+
+    std::cout << std::endl;
+    if(6 == (*brd2.getBlackPieceMap())[p].size()){
+        std::cout << "Captured pieces properly removed." << std::endl;
+    }
+    else{
+        std::cout << "Captured pieces NOT properly removed." << std::endl;
+    }
 
     std::cout << std::endl;
 }

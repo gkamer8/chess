@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.cpp
+board.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
+chess.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
+string
+-
+iostream
+-
+unordered_map
+-
+
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
@@ -19,22 +31,4 @@ vector
 -
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.cpp
-../src/board.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
-board_tests.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.h
-iostream
--
-unistd.h
--
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/board_tests.h
-main_tests.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
-../src/board.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 

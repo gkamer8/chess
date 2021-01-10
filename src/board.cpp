@@ -7,22 +7,20 @@
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 
 std::string pieceToShortString(piece_t t){
-    if(t == K){
-        return "K";
+    switch(t){
+        case K:
+            return "K";
+        case N:
+            return "N";
+        case B:
+            return "B";
+        case R:
+            return "R";
+        case Q:
+            return "Q";
+        default:
+            return "P";
     }
-    else if(t == N){
-        return "N";
-    }
-    else if(t == B){
-        return "B";
-    }
-    else if(t == Q){
-        return "Q";
-    }
-    else if(t == R){
-        return "R";
-    }
-    return "P";
 }
 
 Board::Board(){
@@ -32,6 +30,7 @@ Board::Board(){
     black_ks_castle_eligible = true;
     white_qs_castle_eligible = true;
     black_qs_castle_eligible = true;
+    enPassantLoc = "";
 
     // Initialize board
     sq_colors_t clr_track = dark;
@@ -167,6 +166,7 @@ Board::Board(Board& brd){
     black_ks_castle_eligible = brd.black_ks_castle_eligible;
     white_qs_castle_eligible = brd.white_qs_castle_eligible;
     black_qs_castle_eligible = brd.black_qs_castle_eligible;
+    enPassantLoc = brd.enPassantLoc;
     for (std::pair<std::string, Square> element : brd.square_map){
         Square* new_square = new Square();
         square_map[element.first] = *new_square;
@@ -208,6 +208,22 @@ Board::Board(Board& brd){
 // Note: might throw an error if asked to castle and it can't
 void Board::executeMove(Move& move){
 
+    // Any pawn moving up two squares triggers the en passant flag
+    // Otherwise, see if it's an en passant capture itself
+            // In which case, remove the captured pawn and turn off the en passant flag
+    // In other cases, turn off the en passant flag
+    if(move.piece->type == p && ((move_color == white && (move.to->rank == 2 + move.piece->square->rank)) || (move_color == black && (move.to->rank == move.piece->square->rank - 2)))){
+        enPassantLoc = "";
+        enPassantLoc += move.to->file;
+        enPassantLoc += std::to_string(move.to->rank + 1);
+    }
+    else if(move.enPassant != ""){
+        removePiece(square_map[move.enPassant].piece);
+        enPassantLoc = "";
+    }
+    else{
+        enPassantLoc = "";
+    }
     // Address castling
     if(move.ks_castle){
         if(move_color == white){
@@ -252,6 +268,10 @@ void Board::executeMove(Move& move){
         return;
     }
     else{
+        // If it's a capture, remove the captured piece
+        if(move.to->piece != nullptr){
+            removePiece(move.to->piece);
+        }
         move.piece->square->piece = nullptr;
         move.piece->square = move.to;
         move.to->piece = move.piece;
@@ -446,6 +466,7 @@ bool Board::isLegal(Move& move){
     checkMove.piece = (*checkCheck.getSquareMap())[move.piece->square->name].piece;
     checkMove.promotedTo = move.promotedTo;
     checkMove.to = &(*checkCheck.getSquareMap())[move.to->name];
+    checkMove.enPassant = "";
     checkCheck.executeMove(checkMove);
     if(checkCheck.inCheck(move_color)){
         return false;
@@ -457,6 +478,7 @@ bool Board::isLegal(Move& move){
 struct Move Board::parseMove(std::string move){
     Move parsedMove;
     parsedMove.promotedTo = p;  // Like setting it to null – can never be promoted to pawn
+    parsedMove.enPassant = "";
 
     // TODO: Custom exceptions
 
@@ -533,6 +555,10 @@ struct Move Board::parseMove(std::string move){
                 else{
                     parsedMove.piece = current_square->piece;
                 }
+                // Promotion square has to be empty
+                if(square_map[move.substr(0, 2)].piece != nullptr){
+                    throw "Move illformed";
+                }
                 // Enter promotedTo
                 switch(move[2]){
                     case 'Q':
@@ -574,13 +600,17 @@ struct Move Board::parseMove(std::string move){
                         throw "Move illformed";
                     }
                 }
+                // Pushed square has to be empty
+                if(square_map[move].piece != nullptr){
+                    throw "Move illformed";
+                }
                 // Find the pawn being moved
                 Square* current_square = move_color == white ? square_map[move].s : square_map[move].n;
                 if(current_square->piece != nullptr && current_square->piece->type == p && current_square->piece->owner == move_color){
                     parsedMove.piece = current_square->piece;
                 }
                 else if(current_square->piece == nullptr){
-                    if(move_color == white){
+                    if(move_color == white && current_square->rank == 3-1){
                         if(current_square->s->piece != nullptr && current_square->s->piece->type == p && current_square->s->piece->owner == white){
                             parsedMove.piece = current_square->s->piece;
                         }
@@ -588,7 +618,7 @@ struct Move Board::parseMove(std::string move){
                             throw "Move illformed";
                         }
                     }
-                    if(move_color == black){
+                    if(move_color == black && current_square->rank == 6-1){
                         if(current_square->n->piece != nullptr && current_square->n->piece->type == p && current_square->n->piece->owner == black){
                             parsedMove.piece = current_square->n->piece;
                         }
@@ -617,8 +647,8 @@ struct Move Board::parseMove(std::string move){
             if(move[0] < 'a' || move[0] > 'h'){
                 throw "Move illformed";
             }
-            // Third and fourth chars must be an actual location above 2
-            if(move[2] < 'a' || move[2] > 'h' || move[3] <= '2' || move[3] > '8'){
+            // Third and fourth chars must be an actual location
+            if(move[2] < 'a' || move[2] > 'h' || move[3] < '1' || move[3] > '8'){
                 throw "Move illformed";
             }
             // Find the implied position of the pawn being moved
@@ -632,6 +662,23 @@ struct Move Board::parseMove(std::string move){
             }
             else{
                 parsedMove.piece = square_map[loc_key].piece;
+            }
+            // Make sure that it's actually a capture
+            std::string cap_key = "";
+            cap_key += move[2];
+            cap_key += move[3];
+            if(square_map[cap_key].piece == nullptr){
+                // Must be en passant
+                std::string emp = "";
+                emp += move[2];
+                emp += move_color == white ? move[3] - 1 : move[3] + 1;
+                if(enPassantLoc != emp){
+                    throw "Move illformed";
+                }
+                parsedMove.enPassant = emp;
+            }
+            else if(square_map[cap_key].piece->owner == move_color){
+                throw "Move illformed";
             }
 
             parsedMove.ks_castle = false;
