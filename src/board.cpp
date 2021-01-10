@@ -1368,10 +1368,14 @@ bool Board::inCheck(colors_t king_col){
     else{
         king = white_piece_map[K].front();
     }
+    return isAttacked(king->square, king->owner);
+}
 
+// Determines whether a particular square is being attacked by a certain color
+bool Board::isAttacked(Square* sq, colors_t attacking_col){
     // Check for attacking pawns
-    Square* current = king->square;
-    if(king_col == white){
+    Square* current = sq;
+    if(attacking_col == black){
         if(current->n != nullptr){
             if(current->n->w != nullptr && current->n->w->piece != nullptr && current->n->w->piece->type==p && current->n->w->piece->owner == black){
                 return true;
@@ -1391,37 +1395,37 @@ bool Board::inCheck(colors_t king_col){
     while(current->n != nullptr){
         current = current->n;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == R || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->s != nullptr){
         current = current->s;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == R || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->e != nullptr){
         current = current->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == R || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->w != nullptr){
         current = current->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == R || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == R || current->piece->type == Q)){
                 return true;
             }
             break;
@@ -1429,41 +1433,41 @@ bool Board::inCheck(colors_t king_col){
     }
 
     // Check the diagonals for bishops or queens
-    current = king->square;
+    current = sq;
     while(current->n != nullptr && current->n->e != nullptr){
         current = current->n->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == B || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->n != nullptr && current->n->w != nullptr){
         current = current->n->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == B || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->s != nullptr && current->s->e != nullptr){
         current = current->s->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == B || current->piece->type == Q)){
                 return true;
             }
             break;
         }
     }
-    current = king->square;
+    current = sq;
     while(current->s != nullptr && current->s->w != nullptr){
         current = current->s->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && (current->piece->type == B || current->piece->type == Q)){
+            if(current->piece->owner == attacking_col && (current->piece->type == B || current->piece->type == Q)){
                 return true;
             }
             break;
@@ -1471,74 +1475,74 @@ bool Board::inCheck(colors_t king_col){
     }
 
     // Check the knight squares
-    current = king->square;
+    current = sq;
     if(current->n != nullptr && current->n->n != nullptr && current->n->n->e != nullptr){
         current = current->n->n->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->n != nullptr && current->n->n != nullptr && current->n->n->w != nullptr){
         current = current->n->n->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->n != nullptr && current->n->w != nullptr && current->n->w->w != nullptr){
         current = current->n->w->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->n != nullptr && current->n->e != nullptr && current->n->e->e != nullptr){
         current = current->n->e->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->s != nullptr && current->s->e != nullptr && current->s->e->e != nullptr){
         current = current->s->e->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->s != nullptr && current->s->w != nullptr && current->s->w->w != nullptr){
         current = current->s->w->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->s != nullptr && current->s->s != nullptr && current->s->s->e != nullptr){
         current = current->s->s->e;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }
     }
-    current = king->square;
+    current = sq;
     if(current->s != nullptr && current->s->s != nullptr && current->s->s->w != nullptr){
         current = current->s->s->w;
         if(current->piece != nullptr){
-            if(current->piece->owner != king_col && current->piece->type == N){
+            if(current->piece->owner == attacking_col && current->piece->type == N){
                 return true;
             }
         }

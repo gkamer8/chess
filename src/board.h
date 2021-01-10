@@ -87,6 +87,7 @@ class Board{
         void display();
         colors_t getMoveColor();
         int getMoveNum();
+        bool isAttacked(Square*, colors_t);
 };
 
 #endif

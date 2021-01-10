@@ -643,11 +643,11 @@ void BoardTests::runTests(){
     // parseMoveTest(myBoard);
     // pieceMapTest(myBoard);
     // deletePieceTest(myBoard);
-    // inCheckTest(myBoard);
+    inCheckTest(myBoard);
     // copyTest(myBoard);
     // isLegalTest(myBoard);
     // displayTest(myBoard);
-    moveTest(myBoard);
+    // moveTest(myBoard);
 
     std::cout << "Board tests completed." << std::endl;
 }

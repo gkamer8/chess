@@ -30,6 +30,7 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
         // If they're on the 2nd/7th rank, see if I can move them two squares up
 
     // Go through my non-castling king moves – make sure I'm not in check afterward
+    Piece* king = play_brd.getMoveColor() == white ? (*play_brd.getWhitePieceMap())[K].front() : (*play_brd.getBlackPieceMap())[K].front();
 
     // Go through my rooks
     // Go through my bishops
