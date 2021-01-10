@@ -12,7 +12,7 @@ colors_t prompt_color();
 bool cpu_turn = false;
 
 // If true, only tests are run before program closes.
-bool test_run = false;
+bool test_run = true;
 
 int main(){
 

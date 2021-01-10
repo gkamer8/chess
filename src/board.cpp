@@ -1362,13 +1362,15 @@ void Board::addPiece(Piece* pie){
 bool Board::inCheck(colors_t king_col){
 
     Piece* king;
+    colors_t attacking = white;
     if(king_col == black){
         king = black_piece_map[K].front();
     }
     else{
         king = white_piece_map[K].front();
+        attacking = black;
     }
-    return isAttacked(king->square, king->owner);
+    return isAttacked(king->square, attacking);
 }
 
 // Determines whether a particular square is being attacked by a certain color
