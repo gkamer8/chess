@@ -21,6 +21,11 @@
 },
 {
   "directory": "/Users/gkamer/Desktop/Projects/GitRepos/chess/build",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./include -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./src -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./tests -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/chess.dir/tests/cpu_tests.cpp.o -c /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/cpu_tests.cpp",
+  "file": "/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/cpu_tests.cpp"
+},
+{
+  "directory": "/Users/gkamer/Desktop/Projects/GitRepos/chess/build",
   "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./include -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./src -I/Users/gkamer/Desktop/Projects/GitRepos/chess/./tests -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -o CMakeFiles/chess.dir/tests/main_tests.cpp.o -c /Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.cpp",
   "file": "/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.cpp"
 }

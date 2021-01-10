@@ -22,9 +22,18 @@ CMakeFiles/chess.dir/tests/board_tests.cpp.o: ../tests/board_tests.cpp
 CMakeFiles/chess.dir/tests/board_tests.cpp.o: ../tests/board_tests.h
 CMakeFiles/chess.dir/tests/board_tests.cpp.o: ../tests/main_tests.h
 
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../src/board.h
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../src/chess.h
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../src/cpu.h
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../tests/cpu_tests.cpp
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../tests/cpu_tests.h
+CMakeFiles/chess.dir/tests/cpu_tests.cpp.o: ../tests/main_tests.h
+
 CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../src/board.h
 CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../src/chess.h
+CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../src/cpu.h
 CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../tests/board_tests.h
+CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../tests/cpu_tests.h
 CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../tests/main_tests.cpp
 CMakeFiles/chess.dir/tests/main_tests.cpp.o: ../tests/main_tests.h
 

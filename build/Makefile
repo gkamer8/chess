@@ -250,6 +250,33 @@ tests/board_tests.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/board_tests.cpp.s
 .PHONY : tests/board_tests.cpp.s
 
+tests/cpu_tests.o: tests/cpu_tests.cpp.o
+
+.PHONY : tests/cpu_tests.o
+
+# target to build an object file
+tests/cpu_tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/cpu_tests.cpp.o
+.PHONY : tests/cpu_tests.cpp.o
+
+tests/cpu_tests.i: tests/cpu_tests.cpp.i
+
+.PHONY : tests/cpu_tests.i
+
+# target to preprocess a source file
+tests/cpu_tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/cpu_tests.cpp.i
+.PHONY : tests/cpu_tests.cpp.i
+
+tests/cpu_tests.s: tests/cpu_tests.cpp.s
+
+.PHONY : tests/cpu_tests.s
+
+# target to generate assembly for a file
+tests/cpu_tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/chess.dir/build.make CMakeFiles/chess.dir/tests/cpu_tests.cpp.s
+.PHONY : tests/cpu_tests.cpp.s
+
 tests/main_tests.o: tests/main_tests.cpp.o
 
 .PHONY : tests/main_tests.o
@@ -298,6 +325,9 @@ help:
 	@echo "... tests/board_tests.o"
 	@echo "... tests/board_tests.i"
 	@echo "... tests/board_tests.s"
+	@echo "... tests/cpu_tests.o"
+	@echo "... tests/cpu_tests.i"
+	@echo "... tests/cpu_tests.s"
 	@echo "... tests/main_tests.o"
 	@echo "... tests/main_tests.i"
 	@echo "... tests/main_tests.s"

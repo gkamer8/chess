@@ -14,7 +14,7 @@ class Cpu{
         Cpu(colors_t, Board*);
         std::string getMove();
         std::vector<Move> getLegalMoves(Board&);
-        std::string getMoveName(Move&);
+        std::string getMoveName(Move&);  // Translate move struct into name for current board configuration
 };
 
 #endif

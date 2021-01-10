@@ -14,5 +14,5 @@ project( chess )
 include_directories( ./include ./src ./tests )
 
 # target
-add_executable( chess ./src/chess.cpp ./src/cpu.cpp ./src/board.cpp ./tests/board_tests.cpp ./tests/main_tests.cpp )
+add_executable( chess ./src/chess.cpp ./src/cpu.cpp ./src/board.cpp ./tests/board_tests.cpp ./tests/cpu_tests.cpp ./tests/main_tests.cpp )
 
