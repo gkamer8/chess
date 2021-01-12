@@ -39,6 +39,9 @@ std::string getNaiveName(Move& move, Board* brd){
         }
         n += "x";
     }
+    if(move.promotedTo != p){
+        n += pieceToPrefix(move.promotedTo);
+    }
     n += move.to->name;
     return n;
 }
@@ -55,6 +58,7 @@ void getLegalMovesTest(){
     brd.makeMove("Nf6");
     brd.makeMove("Nc3");
     brd.makeMove("d5");
+    brd.makeMove("d3");
     brd.display();
     std::string mvs = "";
     vector<Move> lst = comp.getLegalMoves(brd);

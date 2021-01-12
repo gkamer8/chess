@@ -225,6 +225,197 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
                 legalMoves.push_back(to_add);
             }
         }
+        else{
+            // Can't push the pawn if it's blocked
+            if(sq->s->piece == nullptr){
+                // Can I promote the pawn?
+                if(sq->rank == 1){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->s;
+                    to_add.promotedTo = Q;
+                    legalMoves.push_back(to_add);
+
+                    Move to_addN;
+                    to_addN.enPassant = "";
+                    to_addN.ks_castle = false;
+                    to_addN.qs_castle = false;
+                    to_addN.piece = i;
+                    to_addN.to = sq->s;
+                    to_addN.promotedTo = N;
+                    legalMoves.push_back(to_addN);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->s;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
+
+                    Move to_addR;
+                    to_addR.enPassant = "";
+                    to_addR.ks_castle = false;
+                    to_addR.qs_castle = false;
+                    to_addR.piece = i;
+                    to_addR.to = sq->s;
+                    to_addR.promotedTo = R;
+                    legalMoves.push_back(to_addR);
+                }
+                else{
+                    // Add a one square pawn push
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->s;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+                // TODO
+                // See if I can move the pawn two squares
+                if(sq->rank == 6 && sq->s->s->piece == nullptr){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->s->s;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+            }
+            // Deal with captures
+            // Capture east
+                // Promotion
+            if(sq->se != nullptr && sq->se->piece != nullptr && sq->se->piece->owner == oppo_col){
+                if(sq->rank == 6){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->se;
+                    to_add.promotedTo = Q;
+                    legalMoves.push_back(to_add);
+
+                    Move to_addN;
+                    to_addN.enPassant = "";
+                    to_addN.ks_castle = false;
+                    to_addN.qs_castle = false;
+                    to_addN.piece = i;
+                    to_addN.to = sq->se;
+                    to_addN.promotedTo = N;
+                    legalMoves.push_back(to_addN);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->se;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
+
+                    Move to_addR;
+                    to_addR.enPassant = "";
+                    to_addR.ks_castle = false;
+                    to_addR.qs_castle = false;
+                    to_addR.piece = i;
+                    to_addR.to = sq->se;
+                    to_addR.promotedTo = R;
+                    legalMoves.push_back(to_addR);
+                }
+                else{
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->se;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+            }
+            // Capture west
+                // Promotion
+            if(sq->sw != nullptr && sq->sw->piece != nullptr && sq->sw->piece->owner == oppo_col){
+                if(sq->rank == 1){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->sw;
+                    to_add.promotedTo = Q;
+                    legalMoves.push_back(to_add);
+
+                    Move to_addN;
+                    to_addN.enPassant = "";
+                    to_addN.ks_castle = false;
+                    to_addN.qs_castle = false;
+                    to_addN.piece = i;
+                    to_addN.to = sq->sw;
+                    to_addN.promotedTo = N;
+                    legalMoves.push_back(to_addN);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->sw;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
+
+                    Move to_addR;
+                    to_addR.enPassant = "";
+                    to_addR.ks_castle = false;
+                    to_addR.qs_castle = false;
+                    to_addR.piece = i;
+                    to_addR.to = sq->sw;
+                    to_addR.promotedTo = R;
+                    legalMoves.push_back(to_addR);
+                }
+                else{
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->sw;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+            }
+            // Capture enpassant east
+            if(sq->se != nullptr && play_brd.getEnPassantLoc() != "" && sq->e->name == play_brd.getEnPassantLoc()){
+                Move to_add;
+                to_add.enPassant = sq->se->name;
+                to_add.ks_castle = false;
+                to_add.qs_castle = false;
+                to_add.piece = i;
+                to_add.to = sq->se;
+                to_add.promotedTo = p;
+                legalMoves.push_back(to_add);
+            }
+            // Capture enpassant west
+            if(play_brd.getEnPassantLoc() != "" && sq->sw != nullptr && sq->w->name == play_brd.getEnPassantLoc()){
+                Move to_add;
+                to_add.enPassant = sq->sw->name;
+                to_add.ks_castle = false;
+                to_add.qs_castle = false;
+                to_add.piece = i;
+                to_add.to = sq->sw;
+                to_add.promotedTo = p;
+                legalMoves.push_back(to_add);
+            }
+        }
     }
 
     // Go through my non-castling king moves – make sure destination square isn't attacked
@@ -367,6 +558,69 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
     }
 
     // Go through my rooks
+    for(const auto i : piece_map[R]){
+        for(int block_i = 0; block_i < 4; block_i++){
+            Square* current = i->square;
+            while(true){
+                if(block_i == 0){
+                    if(current->n == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->n;
+                    }
+                }
+                if(block_i == 1){
+                    if(current->s == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->s;
+                    }
+                }
+                if(block_i == 2){
+                    if(current->e == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->e;
+                    }
+                }
+                if(block_i == 3){
+                    if(current->w == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->w;
+                    }
+                }
+                if(current->piece == nullptr){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+                else if(current->piece->owner == oppo_col){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+        }
+    }
     // Go through my bishops
     // Go through my queens
     // Go through my knights
