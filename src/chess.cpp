@@ -12,7 +12,7 @@ colors_t prompt_color();
 bool cpu_turn = false;
 
 // If true, only tests are run before program closes.
-bool test_run = true;
+bool test_run = false;
 
 int main(){
 
@@ -47,39 +47,34 @@ int main(){
             cout << std::to_string(brd.getMoveNum()) << ": ... ";
         }
         // Wait for user input
-        std::string user_move;
-        cin >> user_move;
-        if(user_move == "show"){
-            brd.display();
-        }
-        else{
-            try{
-                brd.makeMove(user_move);
-            }
-            catch(const char* e){
-                cout << e << std::endl;
-            }
-        }
-    }
-
-    // Main game loop
-    exit(0);
-    while(true){
         if(cpu_turn){
-            cout << comp.getMove() << endl;
-            break;
+            std::string cpu_move = comp.getMove();
+            brd.makeMove(cpu_move);
+            cout << cpu_move << endl;
+            cpu_turn = false;
         }
         else{
-            // Wait for user input
             std::string user_move;
             cin >> user_move;
-            try{
-                brd.makeMove(user_move);
+            if(user_move == "show"){
+                brd.display();
             }
-            catch(const char* e){
-                cout << e;
+            else{
+                try{
+                    brd.makeMove(user_move);
+                    cpu_turn = true;
+                }
+                catch(const char* e){
+                    cout << e << std::endl;
+                }
             }
         }
+        // Check if there are no legal moves (game is over)
+        if((comp.getLegalMoves(brd)).size() == 0){
+            cout << endl << "Game over." << endl;
+            break;
+        }
+
     }
 }
 

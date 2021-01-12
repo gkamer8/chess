@@ -1,4 +1,6 @@
 #include "cpu.h"
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wc++11-extensions"
 
@@ -8,7 +10,11 @@ Cpu::Cpu(colors_t clr, Board* b){
 }
 
 std::string Cpu::getMove(){
-    return "d4";  // Placeholder
+    // Grab a legal move at random and then get the name
+    std::vector<Move> legalMoves = getLegalMoves(*brd);
+    srand(time(NULL));
+    int selection = rand() % legalMoves.size();
+    return brd->getName(legalMoves[selection]);
 }
 
 // Gets legal moves (represented by move structs) for whatever side has the turn
