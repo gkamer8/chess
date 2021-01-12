@@ -1,4 +1,6 @@
 #include "cpu.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc++11-extensions"
 
 Cpu::Cpu(colors_t clr, Board* b){
     color = clr;
@@ -13,7 +15,7 @@ std::string Cpu::getMove(){
 std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
     std::vector<Move> legalMoves;
     colors_t oppo_col = play_brd.getMoveColor() == white ? black : white;
-    std::unordered_map<piece_t, std::list<Piece*>, std::hash<int>> piece_map = oppo_col == white ? *(play_brd.getBlackPieceMap()) : *(play_brd.getWhitePieceMap());
+    std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> > piece_map = oppo_col == white ? *(play_brd.getBlackPieceMap()) : *(play_brd.getWhitePieceMap());
     // Ask if castling is legal
     Move ks_castle = play_brd.parseMove("0-0");
     if(play_brd.isLegal(ks_castle)){
@@ -99,9 +101,129 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
             }
             // Deal with captures
             // Capture east
+                // Promotion
+            if(sq->ne != nullptr && sq->ne->piece != nullptr && sq->ne->piece->owner == oppo_col){
+                if(sq->rank == 6){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->ne;
+                    to_add.promotedTo = Q;
+                    legalMoves.push_back(to_add);
+
+                    Move to_addN;
+                    to_addN.enPassant = "";
+                    to_addN.ks_castle = false;
+                    to_addN.qs_castle = false;
+                    to_addN.piece = i;
+                    to_addN.to = sq->ne;
+                    to_addN.promotedTo = N;
+                    legalMoves.push_back(to_addN);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->ne;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
+
+                    Move to_addR;
+                    to_addR.enPassant = "";
+                    to_addR.ks_castle = false;
+                    to_addR.qs_castle = false;
+                    to_addR.piece = i;
+                    to_addR.to = sq->ne;
+                    to_addR.promotedTo = R;
+                    legalMoves.push_back(to_addR);
+                }
+                else{
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->ne;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+            }
             // Capture west
+                // Promotion
+            if(sq->nw != nullptr && sq->nw->piece != nullptr && sq->nw->piece->owner == oppo_col){
+                if(sq->rank == 6){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->nw;
+                    to_add.promotedTo = Q;
+                    legalMoves.push_back(to_add);
+
+                    Move to_addN;
+                    to_addN.enPassant = "";
+                    to_addN.ks_castle = false;
+                    to_addN.qs_castle = false;
+                    to_addN.piece = i;
+                    to_addN.to = sq->nw;
+                    to_addN.promotedTo = N;
+                    legalMoves.push_back(to_addN);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->nw;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
+
+                    Move to_addR;
+                    to_addR.enPassant = "";
+                    to_addR.ks_castle = false;
+                    to_addR.qs_castle = false;
+                    to_addR.piece = i;
+                    to_addR.to = sq->nw;
+                    to_addR.promotedTo = R;
+                    legalMoves.push_back(to_addR);
+                }
+                else{
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = sq->nw;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+            }
             // Capture enpassant east
+            if(sq->ne != nullptr && play_brd.getEnPassantLoc() != "" && sq->e->name == play_brd.getEnPassantLoc()){
+                Move to_add;
+                to_add.enPassant = sq->ne->name;
+                to_add.ks_castle = false;
+                to_add.qs_castle = false;
+                to_add.piece = i;
+                to_add.to = sq->ne;
+                to_add.promotedTo = p;
+                legalMoves.push_back(to_add);
+            }
             // Capture enpassant west
+            if(play_brd.getEnPassantLoc() != "" && sq->nw != nullptr && sq->w->name == play_brd.getEnPassantLoc()){
+                Move to_add;
+                to_add.enPassant = sq->nw->name;
+                to_add.ks_castle = false;
+                to_add.qs_castle = false;
+                to_add.piece = i;
+                to_add.to = sq->nw;
+                to_add.promotedTo = p;
+                legalMoves.push_back(to_add);
+            }
         }
     }
 

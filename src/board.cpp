@@ -1597,6 +1597,10 @@ int Board::getMoveNum(){
     return move_num;
 }
 
+std::string Board::getEnPassantLoc(){
+    return enPassantLoc;
+}
+
 std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){
     return &square_map;
 }

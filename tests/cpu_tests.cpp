@@ -24,7 +24,7 @@ std::string pieceToPrefix(piece_t t){
 }
 
 // Imperfect move to string function
-std::string getNaiveName(Move& move){
+std::string getNaiveName(Move& move, Board* brd){
     if(move.ks_castle){
         return "0-0";
     }
@@ -33,6 +33,12 @@ std::string getNaiveName(Move& move){
     }
     std::string n = "";
     n += pieceToPrefix(move.piece->type);
+    if((*(brd->getSquareMap()))[move.to->name].piece != nullptr && (*(brd->getSquareMap()))[move.to->name].piece->owner != move.piece->owner){
+        if(move.piece->type == p){
+            n += move.piece->square->file;
+        }
+        n += "x";
+    }
     n += move.to->name;
     return n;
 }
@@ -47,11 +53,16 @@ void getLegalMovesTest(){
     brd.makeMove("Nc6");
     brd.makeMove("Bb5");
     brd.makeMove("Nf6");
-    cout << "Expected: 0-0, Ke2, Kf1" << endl;
+    brd.makeMove("Nc3");
+    brd.makeMove("d5");
+    brd.display();
+    std::string mvs = "";
     vector<Move> lst = comp.getLegalMoves(brd);
     for(int i = 0; i < lst.size(); i++){
-        cout << getNaiveName(lst.at(i)) << endl;
+        mvs += getNaiveName(lst.at(i), &brd);
+        mvs += ", ";
     }
+    cout << mvs.substr(0, mvs.size() - 2) << endl;
     cout << endl;
 
 }

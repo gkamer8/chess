@@ -20,6 +20,10 @@ vector
 
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
 
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.cpp
+cpu.h
+/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
+
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
 chess.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/chess.h
@@ -29,26 +33,4 @@ board.h
 /Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
 vector
 -
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/cpu_tests.cpp
-../src/cpu.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
-cpu_tests.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/cpu_tests.h
-../src/board.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/src/board.h
-iostream
--
-unistd.h
--
-vector
--
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/cpu_tests.h
-main_tests.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
-../src/cpu.h
-/Users/gkamer/Desktop/Projects/GitRepos/chess/src/cpu.h
-
-/Users/gkamer/Desktop/Projects/GitRepos/chess/tests/main_tests.h
 
