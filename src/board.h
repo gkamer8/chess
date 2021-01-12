@@ -89,6 +89,7 @@ class Board{
         int getMoveNum();
         bool isAttacked(Square*, colors_t);
         std::string getEnPassantLoc();
+        std::string getName(Move&);
 };
 
 #endif

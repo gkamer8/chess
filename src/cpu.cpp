@@ -622,11 +622,268 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
         }
     }
     // Go through my bishops
+    for(const auto i : piece_map[B]){
+        for(int block_i = 0; block_i < 4; block_i++){
+            Square* current = i->square;
+            while(true){
+                if(block_i == 0){
+                    if(current->ne == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->ne;
+                    }
+                }
+                if(block_i == 1){
+                    if(current->se == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->se;
+                    }
+                }
+                if(block_i == 2){
+                    if(current->nw == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->nw;
+                    }
+                }
+                if(block_i == 3){
+                    if(current->sw == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->sw;
+                    }
+                }
+                if(current->piece == nullptr){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+                else if(current->piece->owner == oppo_col){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+        }
+    }
     // Go through my queens
+    for(const auto i : piece_map[Q]){
+        for(int block_i = 0; block_i < 8; block_i++){
+            Square* current = i->square;
+            while(true){
+                if(block_i == 0){
+                    if(current->ne == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->ne;
+                    }
+                }
+                if(block_i == 1){
+                    if(current->se == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->se;
+                    }
+                }
+                if(block_i == 2){
+                    if(current->nw == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->nw;
+                    }
+                }
+                if(block_i == 3){
+                    if(current->sw == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->sw;
+                    }
+                }
+                if(block_i == 4){
+                    if(current->n == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->n;
+                    }
+                }
+                if(block_i == 5){
+                    if(current->s == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->s;
+                    }
+                }
+                if(block_i == 6){
+                    if(current->e == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->e;
+                    }
+                }
+                if(block_i == 7){
+                    if(current->w == nullptr){
+                        break;
+                    }
+                    else{
+                        current = current->w;
+                    }
+                }
+                if(current->piece == nullptr){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                }
+                else if(current->piece->owner == oppo_col){
+                    Move to_add;
+                    to_add.enPassant = "";
+                    to_add.ks_castle = false;
+                    to_add.qs_castle = false;
+                    to_add.piece = i;
+                    to_add.to = current;
+                    to_add.promotedTo = p;
+                    legalMoves.push_back(to_add);
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+        }
+    }
     // Go through my knights
+    for(const auto i : piece_map[N]){
+        Square* sq = i->square;
+        if(sq->ne != nullptr && sq->ne->n != nullptr && (sq->ne->n->piece == nullptr || sq->ne->n->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->ne->n;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->nw != nullptr && sq->nw->n != nullptr && (sq->nw->n->piece == nullptr || sq->nw->n->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->nw->n;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->ne != nullptr && sq->ne->e != nullptr && (sq->ne->e->piece == nullptr || sq->ne->e->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->ne->e;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->nw != nullptr && sq->nw->w != nullptr && (sq->nw->w->piece == nullptr || sq->nw->w->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->nw->w;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->se != nullptr && sq->se->s != nullptr && (sq->se->s->piece == nullptr || sq->se->s->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->se->s;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->sw != nullptr && sq->sw->s != nullptr && (sq->sw->s->piece == nullptr || sq->sw->s->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->sw->s;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->sw != nullptr && sq->sw->w != nullptr && (sq->sw->w->piece == nullptr || sq->sw->w->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->sw->w;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+        if(sq->se != nullptr && sq->se->e != nullptr && (sq->se->e->piece == nullptr || sq->se->e->piece->owner == oppo_col)){
+            Move to_add;
+            to_add.enPassant = "";
+            to_add.ks_castle = false;
+            to_add.qs_castle = false;
+            to_add.piece = i;
+            to_add.to = sq->se->e;
+            to_add.promotedTo = p;
+            legalMoves.push_back(to_add);
+        }
+    }
 
     // Make sure that none of the moves result in check
-    return legalMoves;
+    std::vector<Move> filteredLegalMoves;
+    for(const auto i : legalMoves){
+        Board checkCheck(play_brd);
+        Move checkMove;
+        checkMove.ks_castle = i.ks_castle;
+        checkMove.qs_castle = i.qs_castle;
+        checkMove.piece = (*checkCheck.getSquareMap())[i.piece->square->name].piece;
+        checkMove.promotedTo = i.promotedTo;
+        checkMove.to = &(*checkCheck.getSquareMap())[i.to->name];
+        checkMove.enPassant = "";
+        checkCheck.executeMove(checkMove);
+        if(!checkCheck.inCheck(i.piece->owner)){
+            filteredLegalMoves.push_back(i);
+        }
+    }
+
+    return filteredLegalMoves;
 }
 
 std::string Cpu::getMoveName(Move& move){

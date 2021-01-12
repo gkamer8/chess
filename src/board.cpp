@@ -24,6 +24,23 @@ std::string pieceToShortString(piece_t t){
     }
 }
 
+std::string pieceToPrefix(piece_t t){
+    switch(t){
+        case K:
+            return "K";
+        case N:
+            return "N";
+        case B:
+            return "B";
+        case R:
+            return "R";
+        case Q:
+            return "Q";
+        default:
+            return "";
+    }
+}
+
 Board::Board(){
     move_color = white;
     move_num = 1;
@@ -1599,6 +1616,28 @@ int Board::getMoveNum(){
 
 std::string Board::getEnPassantLoc(){
     return enPassantLoc;
+}
+
+// Imperfect move to string function
+std::string Board::getName(Move& move){
+    if(move.ks_castle){
+        return "0-0";
+    }
+    else if(move.qs_castle){
+        return "0-0-0";
+    }
+    std::string n = "";
+    n += pieceToPrefix(move.piece->type);
+    // ADD DISAMBIGUATION
+    if(square_map[move.to->name].piece != nullptr && square_map[move.to->name].piece->owner != move.piece->owner){
+        if(move.piece->type == p){
+            n += move.piece->square->file;
+        }
+        n += "x";
+    }
+    n += pieceToPrefix(move.promotedTo);
+    n += move.to->name;
+    return n;
 }
 
 std::unordered_map<std::string, Square, CustomHash>* Board::getSquareMap(){
