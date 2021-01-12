@@ -1629,6 +1629,213 @@ std::string Board::getName(Move& move){
     std::string n = "";
     n += pieceToPrefix(move.piece->type);
     // ADD DISAMBIGUATION
+    bool ambig_needed = false;
+    bool same_file = false;
+    bool same_rank = false;
+    // Rooks / queens
+    if(move.piece->type == R || move.piece->type == Q){
+        // Go north
+        Square* current = move.to;
+        while(current->n != nullptr){
+            current = current->n;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        // Go south
+        current = move.to;
+        while(current->s != nullptr){
+            current = current->s;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        // Go west
+        current = move.to;
+        while(current->w != nullptr){
+            current = current->w;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        // Go east
+        current = move.to;
+        while(current->e != nullptr){
+            current = current->e;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+    }
+    if(move.piece->type == B || move.piece->type == Q){
+        Square* current = move.to;
+        while(current->ne != nullptr){
+            current = current->ne;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        current = move.to;
+        while(current->nw != nullptr){
+            current = current->nw;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        current = move.to;
+        while(current->se != nullptr){
+            current = current->se;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        current = move.to;
+        while(current->sw != nullptr){
+            current = current->sw;
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+        }
+    }
+    // Knights
+    if(move.piece->type == N){
+        Square* current = move.to;
+        std::vector<Square*> squares;
+        if(current->ne != nullptr){
+            squares.push_back(current->ne->n);
+            squares.push_back(current->ne->e);
+        }
+        if(current->nw != nullptr){
+            squares.push_back(current->nw->n);
+            squares.push_back(current->nw->w);
+        }
+        if(current->se != nullptr){
+            squares.push_back(current->se->e);
+            squares.push_back(current->se->s);
+        }
+        if(current->sw != nullptr){
+            squares.push_back(current->sw->w);
+            squares.push_back(current->sw->s);
+        }
+        
+        for(const auto current : squares){
+            if(current == nullptr){
+                continue;
+            }
+            if(current->piece != nullptr){
+                if(current->piece != move.piece && current->piece->owner == move.piece->owner && current->piece->type == move.piece->type){
+                    ambig_needed = true;
+                    if(current->rank == move.piece->square->rank){
+                        same_rank = true;
+                    }
+                    if(current->file == move.piece->square->file){
+                        same_file = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if(ambig_needed){
+        if(!same_file){
+            n += move.piece->square->file;
+        }
+        else if(!same_rank){
+            n += std::to_string(move.piece->square->rank + 1);
+        }
+        else{
+            n += move.piece->square->name;
+        }
+    }
+
     if(square_map[move.to->name].piece != nullptr && square_map[move.to->name].piece->owner != move.piece->owner){
         if(move.piece->type == p){
             n += move.piece->square->file;
