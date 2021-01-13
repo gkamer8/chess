@@ -1395,17 +1395,19 @@ bool Board::isAttacked(Square* sq, colors_t attacking_col){
     // Check for attacking pawns
     Square* current = sq;
     if(attacking_col == black){
-        if(current->n != nullptr){
-            if(current->n->w != nullptr && current->n->w->piece != nullptr && current->n->w->piece->type==p && current->n->w->piece->owner == black){
-                return true;
-            }
+        if(current->nw != nullptr && current->nw->piece != nullptr && current->nw->piece->type==p && current->nw->piece->owner == black){
+            return true;
+        }
+        if(current->ne != nullptr && current->ne->piece != nullptr && current->ne->piece->type==p && current->ne->piece->owner == black){
+            return true;
         }
     }
     else{
-        if(current->s != nullptr){
-            if(current->s->w != nullptr && current->s->w->piece != nullptr && current->s->w->piece->type==p && current->s->w->piece->owner == white){
-                return true;
-            }
+        if(current->sw != nullptr && current->sw->piece != nullptr && current->sw->piece->type==p && current->sw->piece->owner == white){
+            return true;
+        }
+        if(current->se != nullptr && current->se->piece != nullptr && current->se->piece->type==p && current->se->piece->owner == white){
+            return true;
         }
     }
 
