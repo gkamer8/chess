@@ -72,6 +72,7 @@ class Board{
     public:
         Board();
         Board(Board&);
+        ~Board();
         void makeMove(std::string);
         Move parseMove(std::string);
         std::unordered_map<std::string, Square, CustomHash>* getSquareMap();

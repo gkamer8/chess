@@ -176,6 +176,22 @@ Board::Board(){
     }
 }
 
+Board::~Board(){
+    // Before: 159.3MB after move 200
+    // After: 564KB after move 200
+    // Remove pieces (squares not created with new)
+    for(char f = 'a'; f <= 'h'; f++){
+        for(char r = '1'; r <= '8'; r++){
+            std::string loc = "";
+            loc += f;
+            loc += r;
+            if(square_map[loc].piece != nullptr){
+                removePiece(square_map[loc].piece);
+            }
+        }
+    }
+}
+
 // Copy constructor - deep copy
 Board::Board(Board& brd){
     move_color = brd.move_color;
@@ -186,8 +202,8 @@ Board::Board(Board& brd){
     black_qs_castle_eligible = brd.black_qs_castle_eligible;
     enPassantLoc = brd.enPassantLoc;
     for (std::pair<std::string, Square> element : brd.square_map){
-        Square* new_square = new Square();
-        square_map[element.first] = *new_square;
+        Square new_square;
+        square_map[element.first] = new_square;
     }
     for (std::pair<std::string, Square> element : brd.square_map){
         square_map[element.first].clr = element.second.clr;
