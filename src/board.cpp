@@ -660,8 +660,27 @@ struct Move Board::parseMove(std::string move){
         // Is it a pawn capture?
         if(move[1] == 'x'){
             // At this point, it must be 4 characters, i.e. exd4
+            // unless it's a promotion on capture...
             if(move.length() != 4){
-                throw "Move illformed";
+                if(move[move.size() - 1] != 'Q' && move[move.size() - 1] != 'N' && move[move.size() - 1] != 'B' && move[move.size() - 1] != 'R'){
+                    throw "Move illformed";
+                }
+                else{
+                    switch(move[move.size() - 1]){
+                        case 'Q':
+                            parsedMove.promotedTo = Q;
+                            break;
+                        case 'B':
+                            parsedMove.promotedTo = B;
+                            break;
+                        case 'R':
+                            parsedMove.promotedTo = R;
+                            break;
+                        case 'N':
+                            parsedMove.promotedTo = N;
+                            break;
+                    }
+                }
             }
             // First char has to be an actual file
             if(move[0] < 'a' || move[0] > 'h'){
@@ -1620,7 +1639,6 @@ std::string Board::getEnPassantLoc(){
     return enPassantLoc;
 }
 
-// Imperfect move to string function
 std::string Board::getName(Move& move){
     if(move.ks_castle){
         return "0-0";
