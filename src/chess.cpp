@@ -13,6 +13,7 @@ bool cpu_turn = false;
 
 // If true, only tests are run before program closes.
 bool test_run = false;
+bool cpu_play = false;  // enables a mode where you watch the CPU play itself
 
 int main(){
 
@@ -47,6 +48,7 @@ int main(){
             cout << std::to_string(brd.getMoveNum()) << ": ... ";
         }
         // Wait for user input
+        cpu_turn = cpu_play ? true : cpu_turn;
         if(cpu_turn){
             std::string cpu_move = comp.getMove();
             brd.makeMove(cpu_move);
@@ -67,6 +69,13 @@ int main(){
                 catch(const char* e){
                     cout << e << std::endl;
                 }
+            }
+        }
+        if(cpu_play){
+            char cont;
+            cont = getchar();
+            if(cont == 's'){
+                brd.display();
             }
         }
         // Check if there are no legal moves (game is over)
