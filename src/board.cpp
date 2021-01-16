@@ -297,6 +297,11 @@ void Board::executeMove(Move& move){
 
     if(move.promotedTo != p){
         move.piece->type = move.promotedTo;
+        // Remove from pawn list
+        std::unordered_map<piece_t, std::list<Piece*>, std::hash<int> >* piece_map = move.piece->owner == white ? &white_piece_map : &black_piece_map;
+        (*piece_map)[p].remove(move.piece);
+        // Add piece to correct piece map list
+        (*piece_map)[move.piece->type].push_front(move.piece);
     }
 }
 
@@ -1587,6 +1592,34 @@ bool Board::isAttacked(Square* sq, colors_t attacking_col){
             }
         }
     }
+
+    // Check for the opponent's king
+    Piece* oppo_king = attacking_col == white ? white_piece_map[K].front() : black_piece_map[K].front();
+    if(sq->n != nullptr && oppo_king->square == sq->n){
+        return true;
+    }
+    if(sq->s != nullptr && oppo_king->square == sq->s){
+        return true;
+    }
+    if(sq->e != nullptr && oppo_king->square == sq->e){
+        return true;
+    }
+    if(sq->w != nullptr && oppo_king->square == sq->w){
+        return true;
+    }
+    if(sq->ne != nullptr && oppo_king->square == sq->ne){
+        return true;
+    }
+    if(sq->nw != nullptr && oppo_king->square == sq->nw){
+        return true;
+    }
+    if(sq->se != nullptr && oppo_king->square == sq->se){
+        return true;
+    }
+    if(sq->sw != nullptr && oppo_king->square == sq->sw){
+        return true;
+    }
+
     return false;
 }
 

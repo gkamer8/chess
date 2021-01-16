@@ -128,15 +128,6 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
                     to_addN.promotedTo = N;
                     legalMoves.push_back(to_addN);
 
-                    Move to_addB;
-                    to_addB.enPassant = "";
-                    to_addB.ks_castle = false;
-                    to_addB.qs_castle = false;
-                    to_addB.piece = i;
-                    to_addB.to = sq->ne;
-                    to_addB.promotedTo = B;
-                    legalMoves.push_back(to_addB);
-
                     Move to_addR;
                     to_addR.enPassant = "";
                     to_addR.ks_castle = false;
@@ -145,6 +136,15 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
                     to_addR.to = sq->ne;
                     to_addR.promotedTo = R;
                     legalMoves.push_back(to_addR);
+
+                    Move to_addB;
+                    to_addB.enPassant = "";
+                    to_addB.ks_castle = false;
+                    to_addB.qs_castle = false;
+                    to_addB.piece = i;
+                    to_addB.to = sq->ne;
+                    to_addB.promotedTo = B;
+                    legalMoves.push_back(to_addB);
                 }
                 else{
                     Move to_add;
