@@ -13,7 +13,7 @@ bool cpu_turn = false;
 
 // If true, only tests are run before program closes.
 bool test_run = false;
-bool cpu_play = true;  // enables a mode where you watch the CPU play itself
+bool cpu_play = false;  // enables a mode where you watch the CPU play itself
 
 int main(){
 
