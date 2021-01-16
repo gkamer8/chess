@@ -1862,8 +1862,8 @@ std::string Board::getName(Move& move){
         }
         n += "x";
     }
-    n += pieceToPrefix(move.promotedTo);
     n += move.to->name;
+    n += pieceToPrefix(move.promotedTo);
     return n;
 }
 

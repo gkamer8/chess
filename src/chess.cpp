@@ -51,7 +51,15 @@ int main(){
         cpu_turn = cpu_play ? true : cpu_turn;
         if(cpu_turn){
             std::string cpu_move = comp.getMove();
-            brd.makeMove(cpu_move);
+            try{
+                brd.makeMove(cpu_move);
+            }
+            catch(const char* e){
+                cout << e << endl;
+                cout << "Move: " << cpu_move << endl;
+                cout << "Player: " << cpu_color << endl;
+                brd.display();
+            }
             cout << cpu_move << endl;
             cpu_turn = false;
         }
