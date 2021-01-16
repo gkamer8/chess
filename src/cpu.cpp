@@ -300,7 +300,7 @@ std::vector<Move> Cpu::getLegalMoves(Board& play_brd){
             // Capture east
                 // Promotion
             if(sq->se != nullptr && sq->se->piece != nullptr && sq->se->piece->owner == oppo_col){
-                if(sq->rank == 6){
+                if(sq->rank == 1){
                     Move to_add;
                     to_add.enPassant = "";
                     to_add.ks_castle = false;
