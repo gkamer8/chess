@@ -1332,7 +1332,7 @@ struct Move Board::parseMove(std::string move){
         }
         // Check sww
         current = &square_map[loc_key];
-        if(!found && current->se != nullptr && current->se->w != nullptr){
+        if(!found && current->sw != nullptr && current->sw->w != nullptr){
             current = current->s->w->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1358,7 +1358,7 @@ struct Move Board::parseMove(std::string move){
         }
         // Check ssw
         current = &square_map[loc_key];
-        if(!found && current->s != nullptr && current->s->se != nullptr){
+        if(!found && current->s != nullptr && current->s->sw != nullptr){
             current = current->s->s->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
