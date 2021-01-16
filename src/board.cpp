@@ -1267,7 +1267,7 @@ struct Move Board::parseMove(std::string move){
         bool found = false;
         // Check nne
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->n != nullptr && current->n->n->e != nullptr){
+        if(!found && current->n != nullptr && current->n->ne != nullptr){
             current = current->n->n->e;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1276,12 +1276,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check nnw
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->n != nullptr && current->n->n->w != nullptr){
+        if(!found && current->n != nullptr && current->n->nw != nullptr){
             current = current->n->n->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1290,12 +1289,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check nee
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->e != nullptr && current->n->e->e != nullptr){
+        if(!found && current->ne != nullptr && current->ne->e != nullptr){
             current = current->n->e->e;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1304,12 +1302,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check nww
         current = &square_map[loc_key];
-        while(!found && current->n != nullptr && current->n->w != nullptr && current->n->w->w != nullptr){
+        if(!found && current->nw != nullptr && current->nw->w != nullptr){
             current = current->n->w->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1318,12 +1315,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check see
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->e != nullptr && current->s->e->e != nullptr){
+        if(!found && current->se != nullptr && current->se->e != nullptr){
             current = current->s->e->e;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1332,12 +1328,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check sww
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->w != nullptr && current->s->w->w != nullptr){
+        if(!found && current->se != nullptr && current->se->w != nullptr){
             current = current->s->w->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1346,12 +1341,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check sse
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->s != nullptr && current->s->s->e != nullptr){
+        if(!found && current->s != nullptr && current->s->se != nullptr){
             current = current->s->s->e;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1360,12 +1354,11 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't hav ea piece blocking the square.
             }
         }
         // Check ssw
         current = &square_map[loc_key];
-        while(!found && current->s != nullptr && current->s->s != nullptr && current->s->s->w != nullptr){
+        if(!found && current->s != nullptr && current->s->se != nullptr){
             current = current->s->s->w;
             if(current->piece != nullptr){
                 if(current->piece->owner == move_color && current->piece->type == N){
@@ -1374,7 +1367,6 @@ struct Move Board::parseMove(std::string move){
                         found = true;
                     }
                 }
-                break;  // Either way, can't have a piece blocking the square.
             }
         }
         if(!found){
