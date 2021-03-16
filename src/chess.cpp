@@ -68,6 +68,9 @@ int main(){
             if(user_move == "show"){
                 brd.display();
             }
+            else if(user_move == "quit"){
+                exit(0);
+            }
             else{
                 try{
                     brd.makeMove(user_move);
