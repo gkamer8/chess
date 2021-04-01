@@ -805,7 +805,8 @@ struct Move Board::parseMove(std::string move){
     // Is it a Queen move?
     if(move[0] == 'Q'){
         // Get rid of captures sign
-        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // Doesn't work on linux: move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        for(int i = 0; i < move.size(); i++) if (move[i] == 'x') move.erase(i);
         // Get where the move is to
         std::string loc_key = "";
         if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
@@ -979,7 +980,8 @@ struct Move Board::parseMove(std::string move){
     // Bishop move
     if(move[0] == 'B'){
         // Get rid of captures sign
-        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        for(int i = 0; i < move.size(); i++) if (move[i] == 'x') move.erase(i);
         // Get where the move is to
         std::string loc_key = "";
         if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
@@ -1097,7 +1099,8 @@ struct Move Board::parseMove(std::string move){
     // Rook move
     if(move[0] == 'R'){
         // Get rid of captures sign
-        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        for(int i = 0; i < move.size(); i++) if (move[i] == 'x') move.erase(i);
         // Get where the move is to
         std::string loc_key = "";
         if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
@@ -1215,7 +1218,8 @@ struct Move Board::parseMove(std::string move){
     // Knight move
     if(move[0] == 'N'){
         // Get rid of captures sign
-        move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        // move.erase(std::remove(move.begin(), move.end(), 'x'), move.end());
+        for(int i = 0; i < move.size(); i++) if (move[i] == 'x') move.erase(i);
         // Get where the move is to
         std::string loc_key = "";
         if(move[move.size() - 2] < 'a' || move[move.size() - 2] > 'h'){
